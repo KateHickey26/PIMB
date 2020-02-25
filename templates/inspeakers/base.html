@@ -1,10 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <meta charset="UTF-8">
-    <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
+    <title>
+    {% block title_block %}
+      Inspiring Speakers
+    {% endblock %}
+    </title>
+  </head>
+
+  <body>
+    <div>
+      {% block body_block %}
+      {% endblock %}
+    </div>
+    <div>
+      {% block sidebar_block %}
+
+      {% endblock %}
+    </div>
+  </body>
+
 </html>
