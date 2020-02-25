@@ -1,5 +1,5 @@
 from django.urls import paths
-from imspeakers import views
+from inspeakers import views
 
 # app_name = ' '
 
