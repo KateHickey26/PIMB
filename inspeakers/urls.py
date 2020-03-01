@@ -1,4 +1,4 @@
-from django.urls import paths
+from django.urls import path
 from inspeakers import views
 
 # app_name = ' '
