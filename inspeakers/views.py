@@ -7,7 +7,7 @@ def home(request):
     return render(request,'inspeakers/home.html')
 
 def speakerprofile(request):
-    return
+    return render(request,'inspeakers/speakerprofile.html')
 def sign_up(request):
     return
 def user_login(request):
