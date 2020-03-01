@@ -1,13 +1,13 @@
 {% extends 'inspeakers/base.html' %}
-<!-- we could also add {% load static/staticfiles %} here
-    to have the graphics needed for the page -->
+{% load static %}
 
 {% block title_block %}
   Speaker profile
 {% endblock %}
 
+{% block body_block %}
 <div>
-  <img src="/html/images/test.png" alt="Speaker Profile Picture" width="250" height="100">
+  <img src=""{% static 'images/speakertest.jpg' %}" alt="Speaker profile picture" />
 </div>
 
 {% endblock %}
