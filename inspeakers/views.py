@@ -9,12 +9,12 @@ def home(request):
 def speakerprofile(request):
     return render(request,'inspeakers/speakerprofile.html')
 def sign_up(request):
-    return
+    return render(request, 'inspeakers/signup.html')
 def user_login(request):
-    return
+    return render(request, 'inspeakers/login.html')
 @login_required
 def my_account(request):
-    return
+    return render(request, 'inspeakers/myaccount.html')
 # at the moment, review is part of the speaker profile page
 # we can't control "login required" with this method
 # possibly open a new page to add a review?
