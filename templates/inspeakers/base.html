@@ -10,12 +10,12 @@
     </title>
   </head>
   <body>
-    <header>
-      <div class="container" name="header">
+    <header style="background-color: #D0D0D0;">
+      <div class="container" name="header" >
             <div class="row">
                 <div class="col-8 align-self-center">
-                    <div class="row my-2 py-2" name="title"><font size="20">Inspiring Speakers</font></div>
-                    <div class="row my-2 py-2" name="tagline">
+                    <h1 class="row mx-2 my-2 py-2" name="title"><font size="20">Inspiring Speakers</font></h1>
+                    <div class="row mx-2 my-2 py-2" name="tagline">
                         <a href="#" class="badge badge-primary mx-1">Tag1</a>
                         <a href="#" class="badge badge-primary mx-1">Tag2</a>
                         <a href="#" class="badge badge-primary mx-1">Tag3</a>
@@ -23,10 +23,10 @@
                     </div>
                 </div>
                 <div class="col-4 align-self-center">
-                    <div class="row mt-4 md-2 py-2 justify-content-end" name="login" >
+                    <div class="row mx-2 mt-4 md-2 py-2 justify-content-end" name="login" >
                         <button class="btn btn-outline-primary px-4">Login</button>
                     </div>
-                    <div class="row my-2 py-2 justify-content-end" name="search">
+                    <div class="row mx-2 my-2 py-2 justify-content-end" name="search">
                         <div class="input-group" >
                             <input class="form-control" type="text" placeholder="Search">
                             <div class="input-group-append">
@@ -37,20 +37,22 @@
                 </div>
             </div>
         </div>
-        <ul class="nav justify-content-center">
-            <li class="nav-item">
-            <a class="nav-link" href="#">About Us</a>
-            </li>
-            <li class="nav-item">
-            <a class="nav-link" href="#">Home</a>
-            </li>
-            <li class="nav-item">
-            <a class="nav-link" href="#">Top Rated Speaker</a>
-            </li>
-            <li class="nav-item">
-            <a class="nav-link" href="#">Speakers in My Area</a>
-            </li>
-        </ul>
+        <nav style="background-color: #F0F8FF; border-style: solid; border-width: 1px 0px 1px 0px; border-color: #F0FFFF;">
+            <div class="nav my-1 justify-content-center" >
+                <li class="nav-item">
+                <a class="nav-link" href="#">About Us</a>
+                </li>
+                <li class="nav-item">
+                <a class="nav-link" href="#">Home</a>
+                </li>
+                <li class="nav-item">
+                <a class="nav-link" href="#">Top Rated Speaker</a>
+                </li>
+                <li class="nav-item">
+                <a class="nav-link" href="#">Speakers in My Area</a>
+                </li>
+            </div>
+        </nav>
     </header>
     <div>
       {% block body_block %}
