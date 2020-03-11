@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<script async src="https://cse.google.com/cse.js?cx=002858639642519775440:wqougxmojpz"></script>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <head>
+    <meta charset="UTF-8">
+    <title>
+        Inspiring Speakers ——
+    {% block title_block %}
+    {% endblock %}
+    </title>
+      <base href="/inspeakers/">
+  </head>
+  <body>
+    <header style="background-color: #D0D0D0;">
+      <div class="container" name="header" >
+            <div class="row">
+                <div class="col-8 align-self-center">
+                    <h1 class="row mx-2 my-2 py-2" name="title"><font size="20">Inspiring Speakers</font></h1>
+                    <div class="row mx-2 my-2 py-2" name="tagline">
+                        <a href="#" class="badge badge-primary mx-1">Tag1</a>
+                        <a href="#" class="badge badge-primary mx-1">Tag2</a>
+                        <a href="#" class="badge badge-primary mx-1">Tag3</a>
+                        <a href="#" class="badge badge-primary mx-1">Tag4</a>
+                    </div>
+                </div>
+                <div class="col-4 align-self-center">
+                    <div class="row mx-2 mt-4 md-2 py-2 justify-content-end" name="login" >
+                        <form method="get" action="login">
+                            <button class="btn btn-outline-primary px-4">Login</button>
+                        </form>
+                    </div>
+                    <div class="row mx-2 my-2 py-2 justify-content-end" name="search" >
+                        <div style="width:100%;">
+                            <div class="gcse-searchbox-only"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <nav style="background-color: #F0F8FF; border-style: solid; border-width: 1px 0px 1px 0px; border-color: #F0FFFF;">
+            <div class="nav my-1 justify-content-center" >
+                <li class="nav-item">
+                <a class="nav-link" href="#">About Us</a>
+                </li>
+                <li class="nav-item">
+                <a class="nav-link" href="home">Home</a>
+                </li>
+                <li class="nav-item">
+                <a class="nav-link" href="#">Top Rated Speaker</a>
+                </li>
+                <li class="nav-item">
+                <a class="nav-link" href="#">Speakers in My Area</a>
+                </li>
+            </div>
+        </nav>
+    </header>
+    <div>
+      {% block body_block %}
+      {% endblock %}
+    </div>
+    <div>
+      {% block sidebar_block %}
+      {% endblock %}
+    </div>
+  </body>
+</html>
