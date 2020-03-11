@@ -111,7 +111,7 @@
           <a href="">YouTube Link</a><br/>
           <a href="">@twitterhandle</a><br/>
           <a href="">@instagram</a><br/>
-          <a href-"">Website Link</a></br>
+          <a href-"">Website Link</a></<br>
           <strong><p>My Specialities</p></strong>
           <a>Corporate Events</a><br/>
           <a>Divorce Parties</a><br/>
@@ -120,11 +120,49 @@
         </div>
       </div>
     </div>
+</div>
 
+
+    <div class="container">
+      <h1> Comment Box </h1>
+      <!--Wrap-->
+      <div id="wrap">
+        <div id="main">
+          <div class="row">
+            <div class="col-md-5">
+              <h3 class="heading">Comments</h3>
+            </div>
+            <div class="col-md-7">
+              <div id="upper_blank"></div>
+            </div>
+          </div>
+        </div>
+
+        <p>Required fields are marked *</p>
+
+        <!--Form Start-->
+
+        <div id='form'>
+          <div class="row">
+            <div class="col-md-12">
+              <form action="" method="POST" id="commentform">
+                <div id="comment-name" class="form-row">
+                  <input type = "text" placeholder = "Name (required)" name = "dname"  id = "name" >
+                </div>
+                <div id="comment-email" class="form-row">
+                  <input type = "text" placeholder = "Mail (will not be published) (required)" name = "demail"  id = "email">
+                </div>
+                <div id="comment-message" class="form-row">
+                  <textarea name = "comment" placeholder = "Message" id = "comment" ></textarea>
+                </div>
+                <a href="#"><input type="submit" name="dsubmit" id="commentSubmit" value="Submit Comment"></a>
+
+              </form>
             </div>
           </div>
         </div>
       </div>
     </div>
+
 
 {% endblock %}
