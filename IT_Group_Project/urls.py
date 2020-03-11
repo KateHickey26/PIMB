@@ -17,17 +17,11 @@ from django.contrib import admin
 from django.urls import path
 from django.urls import include
 from inspeakers import views
-<<<<<<< HEAD
 from django.conf import settings
 from django.conf.urls.static import static
-=======
->>>>>>> 502c947368b00c435cb46a839dcf0134ea4faca7
+
 
 urlpatterns = [
     path('', views.home, name='home'),
     path('inspeakers/', include('inspeakers.urls')),
-<<<<<<< HEAD
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-=======
-]
->>>>>>> 502c947368b00c435cb46a839dcf0134ea4faca7
