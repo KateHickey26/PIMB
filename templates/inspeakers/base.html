@@ -1,4 +1,6 @@
 <!DOCTYPE html>
+{% load staticfiles %}
+{% load inspeakers_template_tags %}
 <html lang="en">
 <script async src="https://cse.google.com/cse.js?cx=002858639642519775440:wqougxmojpz"></script>
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
@@ -17,11 +19,12 @@
             <div class="row">
                 <div class="col-8 align-self-center">
                     <h1 class="row mx-2 my-2 py-2" name="title"><font size="20">Inspiring Speakers</font></h1>
-                    <div class="row mx-2 my-2 py-2" name="tagline">
-                        <a href="#" class="badge badge-primary mx-1">Tag1</a>
-                        <a href="#" class="badge badge-primary mx-1">Tag2</a>
-                        <a href="#" class="badge badge-primary mx-1">Tag3</a>
-                        <a href="#" class="badge badge-primary mx-1">Tag4</a>
+                    <div style="overflow: auto; width:100%;">
+                    <div class="row mx-2 my-2 py-2" name="tagline" style="height:100%;">
+                        {% block tags_block %}
+                            {% get_tags %}
+                        {% endblock %}
+                    </div>
                     </div>
                 </div>
                 <div class="col-4 align-self-center">
