@@ -122,47 +122,53 @@
     </div>
 </div>
 
-
-    <div class="container">
-      <h1> Comment Box </h1>
-      <!--Wrap-->
-      <div id="wrap">
-        <div id="main">
-          <div class="row">
-            <div class="col-md-5">
-              <h3 class="heading">Comments</h3>
-            </div>
-            <div class="col-md-7">
-              <div id="upper_blank"></div>
-            </div>
-          </div>
-        </div>
-
-        <p>Required fields are marked *</p>
-
-        <!--Form Start-->
-
-        <div id='form'>
-          <div class="row">
-            <div class="col-md-12">
-              <form action="" method="POST" id="commentform">
-                <div id="comment-name" class="form-row">
-                  <input type = "text" placeholder = "Name (required)" name = "dname"  id = "name" >
-                </div>
-                <div id="comment-email" class="form-row">
-                  <input type = "text" placeholder = "Mail (will not be published) (required)" name = "demail"  id = "email">
-                </div>
-                <div id="comment-message" class="form-row">
-                  <textarea name = "comment" placeholder = "Message" id = "comment" ></textarea>
-                </div>
-                <a href="#"><input type="submit" name="dsubmit" id="commentSubmit" value="Submit Comment"></a>
-
-              </form>
-            </div>
-          </div>
-        </div>
+<div class="container">
+  <div class="row">
+    <div class="col-md-8 card mb-4  mt-3 left  top">
+      <div class="card-body">
+        <h1>{% block title %} {{ post.title }} {% endblock title %}</h1>
+        <p class=" text-muted">{{ post.author }} | {{ post.created_on }}</p>
+        <p class="card-text ">{{ post.content | safe }}</p>
       </div>
     </div>
+    {% block sidebar %} {% include 'sidebar.html' %} {% endblock sidebar %}
 
+    <div class="col-md-8 card mb-4  mt-3 ">
+      <div class="card-body">
+        <!-- comments -->
+        <h2>{{ comments.count }} comments</h2>
 
+        {% for comment in comments %}
+        <div class="comments" style="padding: 10px;">
+          <p class="font-weight-bold">
+            {{ comment.name }}
+            <span class=" text-muted font-weight-normal">
+              {{ comment.created_on }}
+            </span>
+          </p>
+          {{ comment.body | linebreaks }}
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    <div class="col-md-8 card mb-4  mt-3 ">
+      <div class="card-body">
+        {% if new_comment %}
+        <div class="alert alert-success" role="alert">
+          Your comment is awaiting moderation
+        </div>
+        {% else %}
+        <h3>Leave a comment</h3>
+        <form method="post" style="margin-top: 1.3em;">
+          {{ comment_form.as_p }}
+          {% csrf_token %}
+          <button type="submit" class="btn btn-primary  btn-lg">Submit</button>
+        </form>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+  
 {% endblock %}
