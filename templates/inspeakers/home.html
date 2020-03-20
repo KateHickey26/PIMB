@@ -1,5 +1,6 @@
 {% extends 'inspeakers/base.html' %}
 {% load staticfiles %}
+{% load inspeakers_template_tags %}
 {% block title_block %}
 Homepage
 {% endblock %}
@@ -10,48 +11,9 @@ Homepage
                 <h1>Welcome! to ---!</h1>
                 <ul>Find your next motivation speakers.</ul>
                 <div name="list">
-                    <div class="card mb-3" style="max-width: 720px;">
-                        <div class="row no-gutters">
-                            <div class="col-md-5" style="overflow: hidden; position: relative; height: 200px;">
-                                    <img src="{% static 'images/speakertest2.jpg'%}" class="card-img" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
-                            </div>
-                            <div class="col-md-7"style="height: 200px;">
-                                <div class="card-body">
-                                <h5 class="card-title">Name</h5>
-                                <p class="card-text">Description</p>
-                                <a href="#" class="card-link">Link</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card mb-3" style="max-width: 720px;">
-                        <div class="row no-gutters">
-                            <div class="col-md-5" style="overflow: hidden; position: relative; height: 200px;">
-                                    <img src="{% static 'images/speakertest2.jpg'%}" class="card-img" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
-                            </div>
-                            <div class="col-md-7"style="height: 200px;">
-                                <div class="card-body">
-                                <h5 class="card-title">Name</h5>
-                                <p class="card-text">Description</p>
-                                <a href="#" class="card-link">Link</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card mb-3" style="max-width: 720px;">
-                        <div class="row no-gutters">
-                            <div class="col-md-5" style="overflow: hidden; position: relative; height: 200px;">
-                                    <img src="{% static 'images/speakertest2.jpg'%}" class="card-img" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
-                            </div>
-                            <div class="col-md-7"style="height: 200px;">
-                                <div class="card-body">
-                                    <h5 class="card-title">Name</h5>
-                                    <div class="card-text">Description</div>
-                                    <a href="#" class="card-link">Link</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    {% block speakers_block %}
+                            {% get_speakers %}
+                    {% endblock %}
                     <div class="row justify-content-end">
                         <ul class="pagination mx-2 my-2 justify-content-center">
                             <li class="page-item disabled">

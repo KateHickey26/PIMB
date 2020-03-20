@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.urls import reverse
+from django.template.defaultfilters import slugify
 # Create your models here.
 class UserProfile(models.Model):
     # Links UserProfile to a User model instance.
@@ -14,11 +16,21 @@ class SpeakerProfile(models.Model):
     speaker = models.OneToOneField(User, on_delete=models.CASCADE)
 
     website = models.URLField(blank=True)
+    name = models.CharField(blank=True, max_length=30)
+    description = models.CharField(blank=True, max_length=200)
     picture = models.ImageField(upload_to='profile_images', blank=True)
     email = models.EmailField(blank=True)
     phone = models.CharField(blank=True,max_length=20)
-
+    rate = models.IntegerField(default=0)
     tags = models.ManyToManyField("Tag")
+    slug = models.SlugField(blank=True)
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)
+        super(SpeakerProfile, self).save(*args, **kwargs)
+
+    class Meta:
+        verbose_name_plural = 'speakerprofiles'
 
     def __str__(self):
         return self.speaker.username

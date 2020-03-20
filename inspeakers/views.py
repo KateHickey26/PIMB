@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 def home(request):
     return render(request,'inspeakers/home.html')
 
-def speakerprofile(request):
+def speakerprofile(request, slug):
     return render(request,'inspeakers/speakerprofile.html')
 
 def post_detail(request, slug):
