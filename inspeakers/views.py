@@ -1,13 +1,37 @@
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from inspeakers.models import *
 
 # Create your views here.
 def home(request):
-    return render(request,'inspeakers/home.html')
+    page = request.GET.get('page')
+    max_result = request.GET.get('max_result')
+    order = request.GET.get('order')
+    tag = request.GET.get('tag')
+    if max_result is None:
+        max_result = 3
+    if page is None:
+        page = 1
+    if order is None:
+        order='name'
+    context_dict = {}
+    context_dict['speakers'] = get_speakers(max_result,page,order,tag)['speakers']
+    return render(request,'inspeakers/home.html',context_dict)
 
-def speakerprofile(request, slug):
-    return render(request,'inspeakers/speakerprofile.html')
+
+def get_speakers(max_result, page, order, tag):
+    if tag is None:
+        return {'speakers': SpeakerProfile.objects.order_by(order)[(page-1)*max_result: (page)*max_result]}
+    else:
+        t = Tag.objects.get(name=tag)
+        return {'speakers': SpeakerProfile.objects.filter(tags=t).order_by(order)[(page - 1) * max_result: (page) * max_result]}
+
+def speakerprofile(request, speaker_profile_slug):
+    s = SpeakerProfile.objects.get(slug = speaker_profile_slug)
+    context_dict={}
+    context_dict['speaker'] = s
+    return render(request,'inspeakers/speakerprofile.html',context_dict)
 
 def post_detail(request, slug):
     template_name = 'post_detail.html'
