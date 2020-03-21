@@ -1,0 +1,7 @@
+{% if tags %}
+    {% for t in tags %}
+        <a href="/inspeakers/home/?tag={{t.name}}" class="badge badge-primary mx-1">{{t.name}}</a>
+    {% endfor %}
+{% else %}
+    <strong> There are no tags present</strong>
+{% endif %}

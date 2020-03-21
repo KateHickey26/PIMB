@@ -1,4 +1,5 @@
 from django import forms
+from .models import Comment
 
 # forms for user login, signup, and profile?
 
@@ -13,3 +14,8 @@ class SpeakerProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
         fields = ('website', 'picture',)
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ('name', 'email', 'body')
