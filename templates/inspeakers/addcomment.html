@@ -1,0 +1,21 @@
+<div id="thanks" style="display: none;">
+        <h4>Thank you for submitting your comment!</h4>
+</div>
+<form id="add_review" method="post">
+    {% csrf_token %}
+    <!--HiddenFields-->
+    {% for hidden in form.hidden_fields %}
+      {{ hidden }}
+    {% endfor %}
+    <!--VisibleFields-->
+    {{ form.content }}
+    <span class ="email">
+    Enter your email address:
+    {{ form.email }}
+
+    {% with rating_type='form_rating' rating_style='big' rating_initial=form.rating.value %}
+        {% include 'ginthusiasm/gin_rating_widget.html' %}
+    {% endwith %}
+    <span class= "ar_reviewsubmit"> <a id='add-review-btn' class='ginthusiasm-button'><span>Save Review</span></a></span>
+</form>
+© 2020 GitHub, Inc.

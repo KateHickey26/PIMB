@@ -1,11 +1,15 @@
 {% extends 'inspeakers/base.html' %}
 {% load static %}
+{% load ratings %}
 
 {% block title_block %}
   Speaker profile
 {% endblock %}
 
 {% block body_block %}
+
+<link rel="stylesheet" href="{% static 'star-ratings/css/star-ratings.css' %}">
+<script type="text/javascript" src="{% static 'star-ratings/js/dist/star-ratings.min.js' %}"></script>
 
 <div class="container">
   <div class="row">
@@ -120,55 +124,45 @@
         </div>
       </div>
     </div>
-</div>
+</div
 
-<div class="container">
+# add to my favourites button?
+
+<div class='rating'>
+            {% with rating_type='average_rating' rating_initial=speaker.average_rating %}
+                Average Rating
+                {% include 'inspeakers/review.html'%}
+            {% endwith %}
+        </div>
+
+
+<div class='comments' id='comments'>
   <div class="row">
-    <div class="col-md-8 card mb-4  mt-3 left  top">
-      <div class="card-body">
-        <h1>{% block title %} {{ post.title }} {% endblock title %}</h1>
-        <p class=" text-muted">{{ post.author }} | {{ post.created_on }}</p>
-        <p class="card-text ">{{ post.content | safe }}</p>
-      </div>
-    </div>
-    {% block sidebar %} {% include 'sidebar.html' %} {% endblock sidebar %}
-
     <div class="col-md-8 card mb-4  mt-3 ">
-      <div class="card-body">
+        <h2>Comments</h2>
+
+      <div class='previous_comments'>
         <!-- comments -->
-        <h2>{{ comments.count }} comments</h2>
+      <h3> Previous Reviews </h3>
+        # below lines loops over comments
+        <ul>
+          {% for comment in comments %}
+            {% include "inspeakers/review.html" %}
+          {% endfor %}
+        </ul>
+      </div>
 
-        {% for comment in comments %}
-        <div class="comments" style="padding: 10px;">
-          <p class="font-weight-bold">
-            {{ comment.name }}
-            <span class=" text-muted font-weight-normal">
-              {{ comment.created_on }}
-            </span>
-          </p>
-          {{ comment.body | linebreaks }}
-        </div>
-        {% endfor %}
-      </div>
-    </div>
-    <div class="col-md-8 card mb-4  mt-3 ">
-      <div class="card-body">
-        {% if new_comment %}
-        <div class="alert alert-success" role="alert">
-          Your comment is awaiting moderation
-        </div>
+      <h2> Leave a Comment </h2>
+        {% if user.is_authenticated %}
+          <div class='addcomment'>
+            {% include "inspeakers/addcomment.html" %}
+          </div>
         {% else %}
-        <h3>Leave a comment</h3>
-        <form method="post" style="margin-top: 1.3em;">
-          {{ comment_form.as_p }}
-          {% csrf_token %}
-          <button type="submit" class="btn btn-primary  btn-lg">Submit</button>
-        </form>
-        {% endif %}
-      </div>
+        <a href="{% url 'login' %}">Please log in to leave a new comment! </a>
+         {% endif %}
     </div>
   </div>
 </div>
 
-  
+
 {% endblock %}

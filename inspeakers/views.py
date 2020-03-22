@@ -81,10 +81,6 @@ def speakerprofile(request, speaker_profile_slug):
     context_dict={}
     context_dict['speaker'] = s
     return render(request,'inspeakers/speakerprofile.html',context_dict)
-
-def post_detail(request, slug):
-    template_name = 'post_detail.html'
-    post = get_object_or_404(Post, slug=slug)
     comments = post.comments.filter(active=True) # retrieves all approved comments from the database
     new_comment = None
     # Comment posted
