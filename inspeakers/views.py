@@ -1,6 +1,9 @@
 from django.shortcuts import render
+from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.shortcuts import redirect
+from django.urls import reverse
 from inspeakers.models import *
 
 # Create your views here.
@@ -101,15 +104,73 @@ def post_detail(request, slug):
                                            'comment_form': comment_form})
 
 def sign_up(request):
+    registered = False
+    if request.method == 'POST':
+        user_form = UserForm(request.POST)
+        profile_form = UserProfileForm(request.POST)
+
+        if user_form.is_valid() and profile_form.is_valid():
+            user = user_form.save()
+            user.set_password(user.password)
+            user.save()
+            profile = profile_form.save(commit=False)
+            profile.user = user
+            if 'picture' in request.FILES:
+                profile.picture = request.FILES['picture']
+            profile.save()
+            registered = True
+        else:
+            print(user_form.errors, profile_form.errors)
+    else:
+        user_form = UserForm()
+        profile_form = UserProfileForm()
+
     return render(request, 'inspeakers/signup.html')
 def user_login(request):
-    return render(request, 'inspeakers/login.html')
+    if request.method == 'POST':
+        username = request.POST.get('uname')
+        password = request.POST.get('psw')
+        user = authenticate(username=username, password=password)
+        if user:
+            if user.is_active:
+                login(request, user)
+                return redirect(reverse('inspeakers:home'))
+            else:
+                return HttpResponse("Your Inspeakers account is disabled.")
+        else:
+            print(f"Invalid login details: {username}, {password}")
+            return HttpResponse("Invalid login details supplied.")
+    else:
+        return render(request, 'inspeakers/login.html')
+
 @login_required
 def my_account(request):
-    return render(request, 'inspeakers/myaccount.html')
+    user = request.user
+    profile = UserProfile.objects.get(user=user)
+    if request.method == 'POST':
+        newname = request.POST.get('username')
+        newpsw = request.POST.get('password')
+        print(request.FILES)
+        if newname is not "":
+            user.username = newname
+        if newpsw is not "":
+            user.set_password(newpsw)
+        if 'profile_photo' in request.FILES:
+            profile.picture = request.FILES['profile_photo']
+        user.save()
+        profile.save()
+    context_dict={}
+    if profile.picture is not None:
+        context_dict['picture'] = profile.picture
+    else:
+        context_dict['picture'] = ""
+    return render(request, 'inspeakers/myaccount.html',context_dict)
 # at the moment, review is part of the speaker profile page
 # we can't control "login required" with this method
 # possibly open a new page to add a review?
+@login_required
+def my_favourite(request,user_slug):
+    return render(request, 'inspeakers/myfavourite.html')
 @login_required
 def add_review(request):
     return

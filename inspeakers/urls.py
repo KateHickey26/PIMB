@@ -13,7 +13,8 @@ urlpatterns = [
     path('home/speakerprofile/<slug:speaker_profile_slug>', views.speakerprofile, name='speaker_profile'),
     #path('/', views.post_detail, name='post_detail')
     path('signup/', views.sign_up, name='sign_up'),
-    path('login/myaccount/', views.my_account, name='my_account'),
+    path('myaccount/', views.my_account, name='my_account'),
+    path('myfavourite/', views.my_favourite, name='my_favourite'),
     # if we decide to have a new page to add a review
     path('home/speakerprofile/addreview/', views.add_review, name='add_review'),
 ]

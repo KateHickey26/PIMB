@@ -6,6 +6,7 @@ from inspeakers.models import *
 from django.contrib.auth.models import User
 
 def populate():
+    User.objects.all().delete()
     tags = [{'name':'A'},{'name':'B'},{'name':'C'},{'name':'D'}]
     speakers = [{'name':'Adam','desc': 'No desc now','rate': 0, 'Tags':['A','C']},{'name':'Ben','desc': 'No desc now','rate': 3,'Tags':['','C']},{'name':'Chris','desc': 'No desc now','rate': 1, 'Tags':['A','B','C']},{'name':'Donald','desc': 'No desc now','rate': 4,'Tags':['D']}]
     for s in speakers:
@@ -22,10 +23,12 @@ def add_tag(name, popularity=0):
 
 def add_speakers(name, desc, tags , rate = 0):
     try:
-        u = User.objects.create_user(name,name+'@'+name+'.com','123456')
+        u = User.objects.create_user(username = name, email = name+'@'+name+'.com')
     except:
         u = User.objects.get(username = name)
+    u.set_password('123456')
     u.save()
+    a = UserProfile.objects.get_or_create(user=u)
     s = SpeakerProfile.objects.get_or_create(speaker=u)[0]
     for t in tags:
         to =  Tag.objects.get_or_create(name = t)[0]
@@ -37,6 +40,7 @@ def add_speakers(name, desc, tags , rate = 0):
     return s
 
 # Start execution here!
+
 if __name__ == '__main__':
 	print('Starting Inspeakers population script...')
 	populate()
