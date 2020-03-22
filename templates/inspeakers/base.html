@@ -35,6 +35,9 @@
                     <div class="row mt-4 md-2 py-2 justify-content-end" name="login" >
                         {% if user.is_authenticated %}
                         Welcome {{user.username}} !
+                        <form method="get" action="{% url 'inspeakers:logout' %}">
+                            <button class="btn btn-outline-primary px-4">Logout</button>
+                        </form>
                         {% else %}
                         <div class="col">
                         <form method="get" action="{% url 'inspeakers:login' %}">

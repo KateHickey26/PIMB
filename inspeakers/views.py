@@ -23,7 +23,7 @@ def tag(request, tag_name_slug):
     return render(request, 'inspeakers/home.html', context_dict)
 
 
-def get_speakers(request, order, tag):
+def get_speakers(request, order, tag, user = None):
     page = request.GET.get('page')
     max_result = request.GET.get('max_result')
     if max_result is None:
@@ -36,6 +36,9 @@ def get_speakers(request, order, tag):
         page = int(page)
     if order is None:
         order='name'
+
+    if user is not None:
+        speakers = Favourite.objects.filter(user=user).speakers
     if tag is None:
         speakers = SpeakerProfile.objects.order_by(order)
     else:
@@ -170,10 +173,13 @@ def my_account(request):
 # possibly open a new page to add a review?
 @login_required
 def my_favourite(request,user_slug):
-    return render(request, 'inspeakers/myfavourite.html')
+    context_dict = get_speakers(request,None,None,request.user)
+    context_dict['page']['url'] = 'home'
+    return render(request, 'inspeakers/home.html', context_dict)
 @login_required
 def add_review(request):
     return
 @login_required
 def user_logout(request):
-    return
+    logout(request)
+    return redirect(reverse('inspeakers:home'))
