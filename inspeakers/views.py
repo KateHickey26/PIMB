@@ -10,16 +10,19 @@ from inspeakers.models import *
 def home(request):
     context_dict = get_speakers(request, 'name', None)
     context_dict['page']['url'] = 'home'
+    context_dict['description'] = 'Homepage'
     return render(request, 'inspeakers/home.html', context_dict)
 
 def rate(request):
     context_dict = get_speakers(request, 'rate', None)
     context_dict['page']['url'] = 'home/rate'
+    context_dict['description'] = 'Top Rated'
     return render(request, 'inspeakers/home.html', context_dict)
 
 def tag(request, tag_name_slug):
     context_dict = get_speakers(request, 'name', tag_name_slug)
     context_dict['page']['url'] = 'home/tag/'+tag_name_slug
+    context_dict['description'] = 'Tag: ' + tag_name_slug
     return render(request, 'inspeakers/home.html', context_dict)
 
 
@@ -38,12 +41,16 @@ def get_speakers(request, order, tag, user = None):
         order='name'
 
     if user is not None:
-        speakers = Favourite.objects.filter(user=user).speakers
-    if tag is None:
+        try:
+            speakers = Favourite.objects.filter(user=user).speakers
+        except:
+            speakers = []
+    elif tag is None:
         speakers = SpeakerProfile.objects.order_by(order)
     else:
         t = Tag.objects.get(slug=tag)
         speakers = SpeakerProfile.objects.filter(tags=t).order_by(order)
+
     try:
         context_dict = {'speakers': speakers[(page-1)*max_result: (page)*max_result]}
     except:
@@ -172,9 +179,10 @@ def my_account(request):
 # we can't control "login required" with this method
 # possibly open a new page to add a review?
 @login_required
-def my_favourite(request,user_slug):
+def my_favourite(request):
     context_dict = get_speakers(request,None,None,request.user)
     context_dict['page']['url'] = 'home'
+    context_dict['description'] = 'My favourite'
     return render(request, 'inspeakers/home.html', context_dict)
 @login_required
 def add_review(request):
