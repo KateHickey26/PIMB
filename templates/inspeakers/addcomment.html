@@ -14,8 +14,7 @@
     {{ form.email }}
 
     {% with rating_type='form_rating' rating_style='big' rating_initial=form.rating.value %}
-        {% include 'ginthusiasm/gin_rating_widget.html' %}
+        {% include 'inspeakers/starrating.html' %}
     {% endwith %}
-    <span class= "ar_reviewsubmit"> <a id='add-review-btn' class='ginthusiasm-button'><span>Save Review</span></a></span>
+    <span class= "ar_reviewsubmit"> <a id='add-review-btn' class='button'><span>Save Comment</span></a></span>
 </form>
-© 2020 GitHub, Inc.
