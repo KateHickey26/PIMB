@@ -1,7 +1,5 @@
-<div id="thanks" style="display: none;">
-        <h4>Thank you for submitting your comment!</h4>
-</div>
-<form id="add_review" method="post">
+
+<form id="add_comment" method="post">
     {% csrf_token %}
     <!--HiddenFields-->
     {% for hidden in form.hidden_fields %}
