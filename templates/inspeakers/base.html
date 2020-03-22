@@ -6,6 +6,9 @@
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
   <head>
     <meta charset="UTF-8">
+      <meta name="Keywords" content="Inspiring Speakers">
+      {% block meta_block %}
+      {% endblock %}
       <meta name="google-site-verification" content="9uk58ZbxJsMQOlKd_3NZ9nFYwDdCPecouzQyH9hsul4" />
     <title>
         Inspiring Speakers ——
@@ -51,7 +54,7 @@
                 <a class="nav-link" href="home">Home</a>
                 </li>
                 <li class="nav-item">
-                <a class="nav-link" href="home?order=rate">Top Rated Speaker</a>
+                <a class="nav-link" href="home/rate">Top Rated Speaker</a>
                 </li>
                 <li class="nav-item">
                 <a class="nav-link" href="#">Speakers in My Area</a>

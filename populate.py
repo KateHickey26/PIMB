@@ -6,7 +6,7 @@ from inspeakers.models import *
 from django.contrib.auth.models import User
 
 def populate():
-    tags = [{'name':'E'},{'name':'F'},{'name':'G'},{'name':'H'}]
+    tags = [{'name':'A'},{'name':'B'},{'name':'C'},{'name':'D'}]
     speakers = [{'name':'Adam','desc': 'No desc now','rate': 0, 'Tags':['A','C']},{'name':'Ben','desc': 'No desc now','rate': 3,'Tags':['','C']},{'name':'Chris','desc': 'No desc now','rate': 1, 'Tags':['A','B','C']},{'name':'Donald','desc': 'No desc now','rate': 4,'Tags':['D']}]
     for s in speakers:
         add_speakers(s['name'], s['desc'],s['Tags'],s['rate'])

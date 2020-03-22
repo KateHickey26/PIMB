@@ -5,27 +5,70 @@ from inspeakers.models import *
 
 # Create your views here.
 def home(request):
+    context_dict = get_speakers(request, 'name', None)
+    context_dict['page']['url'] = 'home'
+    return render(request, 'inspeakers/home.html', context_dict)
+
+def rate(request):
+    context_dict = get_speakers(request, 'rate', None)
+    context_dict['page']['url'] = 'home/rate'
+    return render(request, 'inspeakers/home.html', context_dict)
+
+def tag(request, tag_name_slug):
+    context_dict = get_speakers(request, 'name', tag_name_slug)
+    context_dict['page']['url'] = 'home/tag/'+tag_name_slug
+    return render(request, 'inspeakers/home.html', context_dict)
+
+
+def get_speakers(request, order, tag):
     page = request.GET.get('page')
     max_result = request.GET.get('max_result')
-    order = request.GET.get('order')
-    tag = request.GET.get('tag')
     if max_result is None:
         max_result = 3
+    else:
+        max_result = int(max_result)
     if page is None:
         page = 1
+    else:
+        page = int(page)
     if order is None:
         order='name'
-    context_dict = {}
-    context_dict['speakers'] = get_speakers(max_result,page,order,tag)['speakers']
-    return render(request,'inspeakers/home.html',context_dict)
-
-
-def get_speakers(max_result, page, order, tag):
     if tag is None:
-        return {'speakers': SpeakerProfile.objects.order_by(order)[(page-1)*max_result: (page)*max_result]}
+        speakers = SpeakerProfile.objects.order_by(order)
     else:
-        t = Tag.objects.get(name=tag)
-        return {'speakers': SpeakerProfile.objects.filter(tags=t).order_by(order)[(page - 1) * max_result: (page) * max_result]}
+        t = Tag.objects.get(slug=tag)
+        speakers = SpeakerProfile.objects.filter(tags=t).order_by(order)
+    try:
+        context_dict = {'speakers': speakers[(page-1)*max_result: (page)*max_result]}
+    except:
+        context_dict = {}
+    if page <= 1:
+        context_dict['page'] = {'previous':1}
+    else:
+        context_dict['page'] = {'previous':page-1}
+    num = int(len(speakers)/max_result)
+    if len(speakers)%max_result > 0:
+        num += 1
+    context_dict['page']['next'] = page + 1
+    pages = []
+    if num >= page + 2:
+        pages.append({'num': page})
+        pages.append({'num': page + 1})
+        pages.append({'num': page + 2})
+    elif num == page + 1:
+        if page - 1 > 0:
+            pages.append({'num': page - 1})
+        pages.append({'num': page})
+        pages.append({'num': page + 1})
+    elif num <= page:
+        if num - 2 > 0:
+            pages.append({'num': num - 2})
+        if num - 1 > 0:
+            pages.append({'num': num - 1})
+        pages.append({'num': num})
+        context_dict['page']['next'] = num
+    context_dict['pages'] = pages
+    return context_dict
 
 def speakerprofile(request, speaker_profile_slug):
     s = SpeakerProfile.objects.get(slug = speaker_profile_slug)

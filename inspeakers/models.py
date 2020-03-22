@@ -52,5 +52,13 @@ class Comment(models.Model):
 class Tag(models.Model):
     name = models.CharField(max_length=20)
     popularity = models.IntegerField(default=0)
+    slug = models.SlugField(blank=True)
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)
+        super(Tag, self).save(*args, **kwargs)
+    class Meta:
+        verbose_name_plural = 'tags'
+
     def __str__(self):
-        return self.tag
+        return self.name
