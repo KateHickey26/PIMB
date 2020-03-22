@@ -1,5 +1,9 @@
 from django import forms
-from .models import Comment
+from inspeakers.models import Comment
+from inspeakers.models import SpeakerProfile
+from inspeakers.models import UserProfile
+from datetime import datetime, date
+
 
 # forms for user login, signup, and profile?
 
@@ -16,6 +20,10 @@ class SpeakerProfileForm(forms.ModelForm):
         fields = ('website', 'picture',)
 
 class CommentForm(forms.ModelForm):
+    date = forms.DateField(widget=forms.HiddenInput(), initial = date.today,required=False)
+    rating = forms.IntegerField(widget=forms.HiddenInput(), initial =0)
+    content = forms.TextInput()
+
     class Meta:
         model = Comment
         fields = ('name', 'email', 'body')
