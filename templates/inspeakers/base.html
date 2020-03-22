@@ -68,13 +68,13 @@
                 <a class="nav-link" href="#">About Us</a>
                 </li>
                 <li class="nav-item">
-                <a class="nav-link" href="home">Home</a>
+                <a class="nav-link" href="{% url 'inspeakers:home'%}">Home</a>
                 </li>
                 <li class="nav-item">
-                <a class="nav-link" href="home/rate">Top Rated Speaker</a>
+                <a class="nav-link" href="{% url 'inspeakers:rate'%}">Top Rated Speaker</a>
                 </li>
                 <li class="nav-item">
-                <a class="nav-link" href="#">Speakers in My Area</a>
+                <a class="nav-link" href="{% url 'inspeakers:fav' %}">Most Liked</a>
                 </li>
             </div>
         </nav>

@@ -8,6 +8,7 @@ urlpatterns = [
     path('home/', views.home, name='home'),
     path('home/tag/<slug:tag_name_slug>/', views.tag, name='tag'),
     path('home/rate/', views.rate, name='rate'),
+    path('home/fav/', views.mfav, name='fav'),
     path('login/', views.user_login, name='login'),
     path('logout/', views.user_logout, name='logout'),
     path('home/speakerprofile/<slug:speaker_profile_slug>', views.speakerprofile, name='speaker_profile'),

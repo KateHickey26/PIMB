@@ -29,12 +29,12 @@ class UserProfile(models.Model):
         return self.user.username
 
 class Favourite(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    speakers = models.OneToOneField("SpeakerProfile", on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    speakers = models.ForeignKey("SpeakerProfile", on_delete=models.CASCADE)
 
 class SpeakerProfile(models.Model):
     speaker = models.OneToOneField(User, on_delete=models.CASCADE)
-
+    favcount = models.IntegerField(default=0)
     website = models.URLField(blank=True)
     youtube = models.URLField(blank=True)
     twitter = models.URLField(blank=True)

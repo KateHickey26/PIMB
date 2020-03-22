@@ -14,7 +14,7 @@ def home(request):
     return render(request, 'inspeakers/home.html', context_dict)
 
 def rate(request):
-    context_dict = get_speakers(request, 'rate', None)
+    context_dict = get_speakers(request, '-rate', None)
     context_dict['page']['url'] = 'home/rate'
     context_dict['description'] = 'Top Rated'
     return render(request, 'inspeakers/home.html', context_dict)
@@ -23,6 +23,12 @@ def tag(request, tag_name_slug):
     context_dict = get_speakers(request, 'name', tag_name_slug)
     context_dict['page']['url'] = 'home/tag/'+tag_name_slug
     context_dict['description'] = 'Tag: ' + tag_name_slug
+    return render(request, 'inspeakers/home.html', context_dict)
+
+def mfav(request):
+    context_dict = get_speakers(request, '-favcount', None)
+    context_dict['page']['url'] = 'home/fav'
+    context_dict['description'] = 'Most Liked'
     return render(request, 'inspeakers/home.html', context_dict)
 
 
@@ -142,6 +148,9 @@ def speakerprofile(request, speaker_profile_slug):
             context_dict['fav'] = True
         else:
             context_dict['fav'] = False
+        s.favcount = Favourite.objects.filter(speakers=s).count()
+        print(s.favcount)
+        s.save()
         if request.method == 'POST':
             if 'profile_photo' in request.FILES:
                 profile.picture = request.FILES['profile_photo']
