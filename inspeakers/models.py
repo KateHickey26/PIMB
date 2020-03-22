@@ -7,7 +7,19 @@ class UserProfile(models.Model):
     # Links UserProfile to a User model instance.
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     # The additional attributes we wish to include.
-    picture = models.ImageField(upload_to='profile_images', blank=True)
+    profile_image = models.ImageField(upload_to='profile_images')
+
+    USER = 'u'
+    SPEAKER = 'sp'
+    ADMIN = 'a'
+
+    USER_TYPES = (
+        (USER, 'Basic User'),
+        (SPEAKER, 'Speaker'),
+        (ADMIN, 'Administrator'),
+    )
+
+    user_type = models.CharField(max_length=2,choices=USER_TYPES,default=BASIC)
 
     def __str__(self):
         return self.user.username
@@ -40,12 +52,17 @@ class SpeakerProfile(models.Model):
         return self.speaker.username
 
 class Comment(models.Model):
-    post = models.ForeignKey(SpeakerProfile,on_delete=models.CASCADE,related_name='comments')
-    name = models.CharField(max_length=80)
-    email = models.EmailField()
-    body = models.TextField()
+    review_type = models.CharField(max_length=2, choices=UserProfile.USER_TYPES, default=UserProfile.BASIC)
+
+    comment = models.ForeignKey(SpeakerProfile,on_delete=models.CASCADE,related_name='comments')
+    user = models.ForeignKey('UserProfile', on_delete=models.CASCADE, related_name='comments')
+    speaker = models.ForeignKey('SpeakerProfile', on_delete=models.CASCADE, related_name='comments')
+    date = models.DateField(blank=True, null=True)
+    rating = models.PositiveSmallIntegerField(blank=True, null=True)
+    body = models.TextField(blank=True)
     created_on = models.DateTimeField(auto_now_add=True)
-    active = models.BooleanField(default=False) #to prevent spam, and manually allow comments, set to false
+    #active = models.BooleanField(default=False) #to prevent spam, and manually allow comments, set to false
+
 
     class Meta:
         ordering = ['created_on']
