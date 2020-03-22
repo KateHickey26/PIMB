@@ -82,8 +82,55 @@ def get_speakers(request, order, tag, user = None):
         context_dict['page']['next'] = num
     context_dict['pages'] = pages
     return context_dict
+@login_required
+def speakerprofileedit(request):
+    if request.method == 'POST':
+        description = request.POST.get('about')
+        company = request.POST.get('company')
+        email = request.POST.get('email')
+        phone = request.POST.get('phone')
+        experience = request.POST.get('experience')
+        hourlyrate = request.POST.get('hourlyrate')
+        youtube = request.POST.get('youtube')
+        twitter = request.POST.get('twitter')
+        ins = request.POST.get('ins')
+        website = request.POST.get('website')
+        tags = request.POST.get('tags')
+        profile = SpeakerProfile.objects.get(speaker=request.user)
+        profile.description = description
+        profile.company = company
+        profile.email = email
+        profile.phone= phone
+        profile.experience = experience
+        profile.hourlyrate = hourlyrate
+        profile.youtube = youtube
+        profile.twitter = twitter
+        profile.ins = ins
+        profile.website = website
+        tags = tags.split(';')
+        for t in tags:
+            o = Tag.objects.get_or_create(name=t)[0]
+            profile.tags.add(o)
+        profile.save()
+    else:
+        profile = SpeakerProfile.objects.get(speaker=request.user)
+    context={}
+    context['speaker'] = profile
+    s = ""
+    for t in profile.tags.all():
+        s += t.name
+    context['tags'] = s
+    return render(request,'inspeakers/edit.html',context)
 
 def speakerprofile(request, speaker_profile_slug):
+    user = request.user
+    profile = SpeakerProfile.objects.get(speaker=user)
+    if request.method == 'POST':
+        if 'profile_photo' in request.FILES:
+            profile.picture = request.FILES['profile_photo']
+        user.save()
+        profile.save()
+
     s = SpeakerProfile.objects.get(slug = speaker_profile_slug)
     context_dict={}
     context_dict['speaker'] = s
@@ -162,12 +209,12 @@ def my_account(request):
         if newpsw is not "":
             user.set_password(newpsw)
         if 'profile_photo' in request.FILES:
-            profile.picture = request.FILES['profile_photo']
+            profile.profile_image = request.FILES['profile_photo']
         user.save()
         profile.save()
     context_dict={}
-    if profile.picture is not None:
-        context_dict['picture'] = profile.picture
+    if profile.profile_image is not None:
+        context_dict['picture'] = profile.profile_image
     else:
         context_dict['picture'] = ""
     return render(request, 'inspeakers/myaccount.html',context_dict)

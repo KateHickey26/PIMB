@@ -7,11 +7,13 @@ class UserProfile(models.Model):
     # Links UserProfile to a User model instance.
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     # The additional attributes we wish to include.
-    profile_image = models.ImageField(upload_to='profile_images')
+    profile_image = models.ImageField(upload_to='profile_images', blank=True)
 
     USER = 'u'
     SPEAKER = 'sp'
     ADMIN = 'a'
+    BASIC = 'u'
+
 
     USER_TYPES = (
         (USER, 'Basic User'),
@@ -32,9 +34,15 @@ class SpeakerProfile(models.Model):
     speaker = models.OneToOneField(User, on_delete=models.CASCADE)
 
     website = models.URLField(blank=True)
+    youtube = models.URLField(blank=True)
+    twitter = models.URLField(blank=True)
+    ins = models.URLField(blank=True)
     name = models.CharField(blank=True, max_length=30)
     description = models.CharField(blank=True, max_length=200)
     picture = models.ImageField(upload_to='profile_images', blank=True)
+    company = models.CharField(blank=True,max_length=100)
+    experience = models.CharField(blank=True,max_length=20)
+    hourlyrate = models.CharField(blank=True,max_length=20)
     email = models.EmailField(blank=True)
     phone = models.CharField(blank=True,max_length=20)
     rate = models.IntegerField(default=0)
@@ -53,10 +61,8 @@ class SpeakerProfile(models.Model):
 
 class Comment(models.Model):
     review_type = models.CharField(max_length=2, choices=UserProfile.USER_TYPES, default=UserProfile.BASIC)
-
-    comment = models.ForeignKey(SpeakerProfile,on_delete=models.CASCADE,related_name='comments')
-    user = models.ForeignKey('UserProfile', on_delete=models.CASCADE, related_name='comments')
-    speaker = models.ForeignKey('SpeakerProfile', on_delete=models.CASCADE, related_name='comments')
+    user = models.ForeignKey('UserProfile', on_delete=models.CASCADE, related_name='comments',blank=True)
+    speaker = models.ForeignKey('SpeakerProfile', on_delete=models.CASCADE, related_name='comments',blank=True)
     date = models.DateField(blank=True, null=True)
     rating = models.PositiveSmallIntegerField(blank=True, null=True)
     body = models.TextField(blank=True)

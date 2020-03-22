@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'inspeakers',
+    'star_ratings',
     'registration',  # Add in the registration package
 ]
 

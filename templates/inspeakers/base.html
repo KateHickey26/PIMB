@@ -1,14 +1,13 @@
 <!DOCTYPE html>
 {% load staticfiles %}
+{% load ratings %}
 {% load inspeakers_template_tags %}
 <html lang="en">
 <script async src="https://cse.google.com/cse.js?cx=002858639642519775440:wqougxmojpz"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
   <head>
-    <meta charset="UTF-8">
-      <meta name="Keywords" content="Inspiring Speakers">
-      {% block meta_block %}
-      {% endblock %}
+    <meta charset="UTF-8"/>
       <meta name="google-site-verification" content="9uk58ZbxJsMQOlKd_3NZ9nFYwDdCPecouzQyH9hsul4" />
     <title>
         Inspiring Speakers ——
@@ -34,10 +33,14 @@
                 <div class="col-5 align-self-center">
                     <div class="row mt-4 md-2 py-2 justify-content-end" name="login" >
                         {% if user.is_authenticated %}
-                        Welcome {{user.username}} !
-                        <form method="get" action="{% url 'inspeakers:logout' %}">
-                            <button class="btn btn-outline-primary px-4">Logout</button>
-                        </form>
+                        <div class="row justify-content-center">
+                            <div class="col-3 mx-1">Welcome {{user.username}} !</div>
+                            <div class="col-2 mx-1">
+                            <form method="get" action="{% url 'inspeakers:logout' %}">
+                                <button class="btn btn-outline-primary px-4">Logout</button>
+                            </form>
+                            </div>
+                        </div>
                         {% else %}
                         <div class="col">
                         <form method="get" action="{% url 'inspeakers:login' %}">

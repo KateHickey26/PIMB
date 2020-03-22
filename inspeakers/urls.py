@@ -11,6 +11,7 @@ urlpatterns = [
     path('login/', views.user_login, name='login'),
     path('logout/', views.user_logout, name='logout'),
     path('home/speakerprofile/<slug:speaker_profile_slug>', views.speakerprofile, name='speaker_profile'),
+    path('home/speakerprofile', views.speakerprofileedit, name='speaker_profile_edit'),
     #path('/', views.post_detail, name='post_detail')
     path('signup/', views.sign_up, name='sign_up'),
     path('myaccount/', views.my_account, name='my_account'),
