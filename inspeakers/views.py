@@ -42,7 +42,10 @@ def get_speakers(request, order, tag, user = None):
 
     if user is not None:
         try:
-            speakers = Favourite.objects.filter(user=user).speakers
+            speakers = []
+            sp = Favourite.objects.filter(user=user)
+            for s in sp:
+                speakers.append(s.speakers)
         except:
             speakers = []
     elif tag is None:
@@ -123,17 +126,28 @@ def speakerprofileedit(request):
     return render(request,'inspeakers/edit.html',context)
 
 def speakerprofile(request, speaker_profile_slug):
+    fav = request.GET.get('fav')
     user = request.user
-    profile = SpeakerProfile.objects.get(speaker=user)
-    if request.method == 'POST':
-        if 'profile_photo' in request.FILES:
-            profile.picture = request.FILES['profile_photo']
-        user.save()
-        profile.save()
-
-    s = SpeakerProfile.objects.get(slug = speaker_profile_slug)
+    s = SpeakerProfile.objects.get(slug=speaker_profile_slug)
     context_dict={}
+    if user.is_authenticated :
+        profile = SpeakerProfile.objects.get(speaker=user)
+        if fav == '0':
+            Favourite.objects.filter(user=user).filter(speakers=s).delete()
+        elif fav == '1':
+            f = Favourite.objects.get_or_create(user=user,speakers=s)[0]
+            f.save()
+
+        if Favourite.objects.filter(user=user).filter(speakers=s).exists():
+            context_dict['fav'] = True
+        else:
+            context_dict['fav'] = False
+        if request.method == 'POST':
+            if 'profile_photo' in request.FILES:
+                profile.picture = request.FILES['profile_photo']
+            profile.save()
     context_dict['speaker'] = s
+
     return render(request,'inspeakers/speakerprofile.html',context_dict)
     comments = post.comments.filter(active=True) # retrieves all approved comments from the database
     new_comment = None

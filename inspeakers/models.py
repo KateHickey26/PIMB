@@ -9,6 +9,8 @@ class UserProfile(models.Model):
     # The additional attributes we wish to include.
     profile_image = models.ImageField(upload_to='profile_images', blank=True)
 
+    favs = models.ManyToManyField("SpeakerProfile")
+
     USER = 'u'
     SPEAKER = 'sp'
     ADMIN = 'a'
@@ -28,7 +30,7 @@ class UserProfile(models.Model):
 
 class Favourite(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    favs = models.ManyToManyField("SpeakerProfile")
+    speakers = models.OneToOneField("SpeakerProfile", on_delete=models.CASCADE)
 
 class SpeakerProfile(models.Model):
     speaker = models.OneToOneField(User, on_delete=models.CASCADE)

@@ -128,6 +128,19 @@
           <button class="btn btn-primary my-2 px-2">Edit</button>
         </form>
         {% endif %}
+        {% if user.is_authenticated %}
+          {% if user.is_authenticated %}
+            {% if not fav %}
+            <form action="{%url 'inspeakers:speaker_profile' speaker.slug%}" method="get">
+              <button type="submit" name="fav" value="1" class="btn btn-primary my-2 px-2">Favourite</button>
+            </form>
+            {% else %}
+            <form action="{%url 'inspeakers:speaker_profile' speaker.slug%}" method="get">
+              <button type="submit" name="fav" value="0" class="btn btn-primary my-2 px-2">UnFavourite</button>
+            </form>
+            {% endif %}
+          {% endif %}
+        {% endif %}
       </div>
     </div>
 </div>
