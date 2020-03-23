@@ -131,11 +131,11 @@
         {% if user.is_authenticated %}
             {% if not fav %}
             <form action="{%url 'inspeakers:speaker_profile' speaker.slug%}" method="get">
-              <button type="submit" name="fav" value="1" class="btn btn-primary my-2 px-2">Favourite</button>
+              <button type="submit" name="fav" value="1" class="btn btn-primary my-2 px-2">Add to My Favourites</button>
             </form>
             {% else %}
             <form action="{%url 'inspeakers:speaker_profile' speaker.slug%}" method="get">
-              <button type="submit" name="fav" value="0" class="btn btn-primary my-2 px-2">UnFavourite</button>
+              <button type="submit" name="fav" value="0" class="btn btn-primary my-2 px-2">Remove from My Favourite</button>
             </form>
             {% endif %}
         {% endif %}
@@ -143,7 +143,6 @@
     </div>
 </div>
 
-# add to my favourites button?
 <div class='rating'>
             {% with rating_type='average_rating' rating_initial=speaker.average_rating %}
                 Average Rating
