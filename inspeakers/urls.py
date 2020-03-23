@@ -19,5 +19,5 @@ urlpatterns = [
     path('myaccount/', views.my_account, name='my_account'),
     path('myfavourite/', views.my_favourite, name='my_favourite'),
     # if we decide to have a new page to add a review
-    path('home/speakerprofile/addreview/', views.add_review, name='add_review'),
+    path('home/speakerprofile', views.add_review, name='add_review'),
 ]
