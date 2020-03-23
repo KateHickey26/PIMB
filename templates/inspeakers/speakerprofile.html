@@ -179,5 +179,21 @@
   </div>
 </div>
 
+{% if user.is_authenticated %}
+<div class="card my-4 text-right">
+    <div class="card-body">
+        <div class="row my-2 justify-content-center">
+            <form action="myaccount/" method="get">
+                <button class="btn btn-primary my-2 px-2" type="submit">My Account</button>
+            </form>
+        </div>
+        <div class="row my-2 justify-content-center">
+            <form action="myfavourite/" method="get">
+                <button class="btn btn-primary my-2 px-2">My Favourites</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endif %}
 
 {% endblock %}
