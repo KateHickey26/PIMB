@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
 from django.urls import reverse
 from inspeakers.models import *
+from datetime import datetime
 
 # Create your views here.
 def home(request):
@@ -156,29 +157,21 @@ def speakerprofile(request, speaker_profile_slug):
                 profile.picture = request.FILES['profile_photo']
             profile.save()
         user.save()
-    context_dict['fav'] = None
+    else:
+        context_dict['fav'] = None
     context_dict['speaker'] = s
     return render(request,'inspeakers/speakerprofile.html',context_dict)
-    comments = post.comments.filter(active=True) # retrieves all approved comments from the database
-    new_comment = None
+
+@login_required
+def comment(request,speaker_profile_slug):
     # Comment posted
     if request.method == 'POST':
-        comment_form = CommentForm(data=request.POST)
-        if comment_form.is_valid():
-
-            # Create Comment object but don't save to database yet
-            new_comment = comment_form.save(commit=False)
-            # Assign the current post to the comment
-            new_comment.post = post
-            # Save the comment to the database
-            new_comment.save()
-    else:
-        comment_form = CommentForm()
-
-    return render(request, template_name, {'post': post,
-                                           'comments': comments,
-                                           'new_comment': new_comment,
-                                           'comment_form': comment_form})
+        comment_text = request.POST.get('comment')
+        time = str(datetime.now())[0:10]
+        user = UserProfile.objects.get(user=request.user)
+        speaker = SpeakerProfile.objects.get(slug=speaker_profile_slug)
+        Comment.objects.create(user=user, body=comment_text, date=time, speaker=speaker)
+    return HttpResponse("Success Comment")
 
 def sign_up(request):
     registered = False
@@ -251,9 +244,11 @@ def my_favourite(request):
     context_dict['page']['url'] = 'home'
     context_dict['description'] = 'My favourite'
     return render(request, 'inspeakers/home.html', context_dict)
+
 @login_required
-def add_review(request):
-    return
+def my_reviews(request):
+    return render(request,'inspeakers/myreviews.html')
+
 @login_required
 def user_logout(request):
     logout(request)

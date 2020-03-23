@@ -143,35 +143,28 @@
     </div>
 </div>
 
-# add to my favourites button?
-<div class='rating'>
-            {% with rating_type='average_rating' rating_initial=speaker.average_rating %}
-                Average Rating
-                {% include 'inspeakers/starrating.html'%}
-            {% endwith %}
-        </div>
-
 
 <div class='comments' id='comments'>
-  <div class="row">
+  <div class="row justify-content-center">
     <div class="col-md-8 card mb-4  mt-3 ">
         <h2>Comments</h2>
 
       <div class='previous_comments'>
         <!-- comments -->
       <h3> Previous Reviews </h3>
-        # below lines loops over comments
         <ul>
-          {% for comment in comments %}
-            {% include "inspeakers/review.html" %}
-          {% endfor %}
+          {% get_reviews speaker %}
         </ul>
       </div>
 
       <h2> Leave a Comment </h2>
         {% if user.is_authenticated %}
           <div class='addcomment'>
-            {% include "inspeakers/addcomment.html" %}
+            <form id="add_comment" action="{%url 'inspeakers:comment' speaker.slug%}" method="post">
+              {% csrf_token %}
+              <textarea class="form-control" name="comment"></textarea>
+              <button class="btn btn-primary my-2"><span>Save Comment</span></button>
+          </form>
           </div>
         {% else %}
         <a href="{% url 'inspeakers:login' %}">Please log in to leave a new comment! </a>

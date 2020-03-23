@@ -29,19 +29,10 @@ My Account
                 </form>
             </div>
         </div>
-        <div class="col-3 my-auto">
-            <div class="row justify-content-end">
-                <button class="btn btn-primary my-2 px-2">My Account</button>
-            </div>
-            <div class="row justify-content-end">
-                <button class="btn btn-primary my-2 px-2">My Bookings</button>
-            </div>
-        </div>
     </div>
     <div>
-        <button class="btn btn-primary my-2 px-2"> My Favourites</button>
-        <button class="btn btn-primary my-2 px-2"> My Bookings</button>
-        <button class="btn btn-primary my-2 px-2"> My Reviews</button>
+        <a href="{% url 'inspeakers:my_favourite'%}"><button class="btn btn-primary my-2 px-2"> My Favourites</button></a>
+        <a href="{% url 'inspeakers:my_reviews'%}"><button class="btn btn-primary my-2 px-2"> My Reviews</button></a>
     </div>
 </div>
 {% endblock %}

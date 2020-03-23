@@ -24,7 +24,6 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('', views.home, name='home'),
     path('inspeakers/', include('inspeakers.urls')),
-    path(r'^ratings/', include('star_ratings.urls', namespace='ratings')),
     path('accounts/', include('registration.backends.simple.urls')),  # Reference for user authentication
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
