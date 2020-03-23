@@ -155,8 +155,9 @@ def speakerprofile(request, speaker_profile_slug):
             if 'profile_photo' in request.FILES:
                 profile.picture = request.FILES['profile_photo']
             profile.save()
+        user.save()
+    context_dict['fav'] = None
     context_dict['speaker'] = s
-
     return render(request,'inspeakers/speakerprofile.html',context_dict)
     comments = post.comments.filter(active=True) # retrieves all approved comments from the database
     new_comment = None

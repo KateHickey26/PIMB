@@ -129,7 +129,6 @@
         </form>
         {% endif %}
         {% if user.is_authenticated %}
-          {% if user.is_authenticated %}
             {% if not fav %}
             <form action="{%url 'inspeakers:speaker_profile' speaker.slug%}" method="get">
               <button type="submit" name="fav" value="1" class="btn btn-primary my-2 px-2">Favourite</button>
@@ -139,7 +138,6 @@
               <button type="submit" name="fav" value="0" class="btn btn-primary my-2 px-2">UnFavourite</button>
             </form>
             {% endif %}
-          {% endif %}
         {% endif %}
       </div>
     </div>
@@ -176,7 +174,7 @@
             {% include "inspeakers/addcomment.html" %}
           </div>
         {% else %}
-        <a href="{% url 'login' %}">Please log in to leave a new comment! </a>
+        <a href="{% url 'inspeakers:login' %}">Please log in to leave a new comment! </a>
          {% endif %}
     </div>
   </div>
