@@ -13,6 +13,11 @@ def home(request):
     context_dict['description'] = 'Homepage'
     return render(request, 'inspeakers/home.html', context_dict)
 
+def about(request):
+    context_dict['page']['url'] = 'about'
+    context_dict['description'] = 'About Us'
+    return render(request, 'inspeakers/home/about.html', context_dict)
+
 def rate(request):
     context_dict = get_speakers(request, '-rate', None)
     context_dict['page']['url'] = 'home/rate'
@@ -251,9 +256,11 @@ def my_favourite(request):
     context_dict['page']['url'] = 'home'
     context_dict['description'] = 'My favourite'
     return render(request, 'inspeakers/home.html', context_dict)
+
 @login_required
 def add_review(request):
     return
+    
 @login_required
 def user_logout(request):
     logout(request)

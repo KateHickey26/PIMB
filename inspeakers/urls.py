@@ -6,6 +6,7 @@ app_name = 'inspeakers'
 # the urls below will follow the app name above
 urlpatterns = [
     path('home/', views.home, name='home'),
+    path('home/about', views.about, name='about'),
     path('home/tag/<slug:tag_name_slug>/', views.tag, name='tag'),
     path('home/rate/', views.rate, name='rate'),
     path('home/fav/', views.mfav, name='fav'),
