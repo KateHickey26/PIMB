@@ -19,4 +19,5 @@ urlpatterns = [
     path('myaccount/', views.my_account, name='my_account'),
     path('myfavourite/', views.my_favourite, name='my_favourite'),
     path('myreviews/', views.my_reviews, name='my_reviews'),
+    path('about/', views.about, name='about'),
 ]

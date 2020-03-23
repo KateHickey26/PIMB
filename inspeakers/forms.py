@@ -24,16 +24,3 @@ class UploadFileForm(forms.ModelForm):
         model = UserProfile
         fields = {'profile_image'}
 
-class SpeakerProfileForm(forms.ModelForm):
-    class Meta:
-        model = UserProfile
-        fields = {'website', 'image', 'youtube', 'description', 'email', 'manager_name', 'manager_phone',}
-
-class CommentForm(forms.ModelForm):
-    date = forms.DateField(widget=forms.HiddenInput(), initial = date.today,required=False)
-    rating = forms.IntegerField(widget=forms.HiddenInput(), initial =0)
-    content = forms.TextInput()
-
-    class Meta:
-        model = Comment
-        fields = {'name', 'email', 'body'}

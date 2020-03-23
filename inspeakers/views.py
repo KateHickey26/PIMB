@@ -6,6 +6,7 @@ from django.shortcuts import redirect
 from django.urls import reverse
 from inspeakers.models import *
 from datetime import datetime
+from inspeakers.forms import UserForm
 
 # Create your views here.
 def home(request):
@@ -95,6 +96,7 @@ def get_speakers(request, order, tag, user = None):
 @login_required
 def speakerprofileedit(request):
     if request.method == 'POST':
+        name = request.POST.get('name')
         description = request.POST.get('about')
         company = request.POST.get('company')
         email = request.POST.get('email')
@@ -106,7 +108,8 @@ def speakerprofileedit(request):
         ins = request.POST.get('ins')
         website = request.POST.get('website')
         tags = request.POST.get('tags')
-        profile = SpeakerProfile.objects.get(speaker=request.user)
+        profile = SpeakerProfile.objects.get_or_create(speaker=request.user)[0]
+        profile.name = name
         profile.description = description
         profile.company = company
         profile.email = email
@@ -123,12 +126,20 @@ def speakerprofileedit(request):
             profile.tags.add(o)
         profile.save()
     else:
-        profile = SpeakerProfile.objects.get(speaker=request.user)
+        try:
+            profile = SpeakerProfile.objects.get(speaker=request.user)
+        except:
+            profile = None
     context={}
     context['speaker'] = profile
+    sl = []
     s = ""
-    for t in profile.tags.all():
-        s += t.name
+    try:
+        for t in profile.tags.all():
+            sl.append(t.name)
+            s = ";".join(sl)
+    except:
+        None
     context['tags'] = s
     return render(request,'inspeakers/edit.html',context)
 
@@ -162,6 +173,9 @@ def speakerprofile(request, speaker_profile_slug):
     context_dict['speaker'] = s
     return render(request,'inspeakers/speakerprofile.html',context_dict)
 
+def about(request):
+    return render(request, 'inspeakers/about.html')
+
 @login_required
 def comment(request,speaker_profile_slug):
     # Comment posted
@@ -177,25 +191,21 @@ def sign_up(request):
     registered = False
     if request.method == 'POST':
         user_form = UserForm(request.POST)
-        profile_form = UserProfileForm(request.POST)
-
-        if user_form.is_valid() and profile_form.is_valid():
+        if user_form.is_valid():
             user = user_form.save()
             user.set_password(user.password)
             user.save()
-            profile = profile_form.save(commit=False)
-            profile.user = user
+            profile = UserProfile.objects.create(user=user)
             if 'picture' in request.FILES:
-                profile.picture = request.FILES['picture']
+                profile.profile_image = request.FILES['picture']
             profile.save()
             registered = True
         else:
-            print(user_form.errors, profile_form.errors)
+            print(user_form.errors)
     else:
         user_form = UserForm()
-        profile_form = UserProfileForm()
+    return render(request,'inspeakers/signup.html')
 
-    return render(request, 'inspeakers/signup.html')
 def user_login(request):
     if request.method == 'POST':
         username = request.POST.get('uname')
@@ -234,6 +244,15 @@ def my_account(request):
         context_dict['picture'] = profile.profile_image
     else:
         context_dict['picture'] = ""
+    try:
+        s = SpeakerProfile.objects.get(speaker=user)
+    except:
+        s = None
+    if s is not None:
+        context_dict['created'] = True
+        context_dict['myslug'] = s.slug
+    else:
+        context_dict['created'] = False
     return render(request, 'inspeakers/myaccount.html',context_dict)
 # at the moment, review is part of the speaker profile page
 # we can't control "login required" with this method

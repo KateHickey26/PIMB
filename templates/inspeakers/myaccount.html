@@ -33,6 +33,11 @@ My Account
     <div>
         <a href="{% url 'inspeakers:my_favourite'%}"><button class="btn btn-primary my-2 px-2"> My Favourites</button></a>
         <a href="{% url 'inspeakers:my_reviews'%}"><button class="btn btn-primary my-2 px-2"> My Reviews</button></a>
+        {% if created %}
+        <a href="{% url 'inspeakers:speaker_profile' myslug %}"><button class="btn btn-primary my-2 px-2"> My Speaker Profile</button></a>
+        {% else %}
+        <a href="{% url 'inspeakers:speaker_profile_edit'%}"><button class="btn btn-primary my-2 px-2"> Create Speaker Profile</button></a>
+        {% endif %}
     </div>
 </div>
 {% endblock %}

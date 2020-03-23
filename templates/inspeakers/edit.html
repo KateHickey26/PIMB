@@ -15,6 +15,12 @@
      <div class="row mx-5 justify-content-center">
      <form action="{% url 'inspeakers:speaker_profile_edit' %}", method="post">
          {% csrf_token %}
+         <div class="input-group flex-nowrap my-2">
+        <div class="input-group-prepend">
+        <span class="input-group-text" >Name</span>
+        </div>
+        <input type="text" class="form-control" name="name" value="{{speaker.name}}" required>
+        </div>
         <div class="input-group my-2">
           <div class="input-group-prepend">
             <span class="input-group-text">About</span>
