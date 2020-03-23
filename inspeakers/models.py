@@ -62,7 +62,6 @@ class SpeakerProfile(models.Model):
         return self.speaker.username
 
 class Comment(models.Model):
-    review_type = models.CharField(max_length=2, choices=UserProfile.USER_TYPES, default=UserProfile.BASIC)
     user = models.ForeignKey('UserProfile', on_delete=models.CASCADE, related_name='comments',blank=True)
     speaker = models.ForeignKey('SpeakerProfile', on_delete=models.CASCADE, related_name='comments',blank=True)
     date = models.DateField(blank=True, null=True)

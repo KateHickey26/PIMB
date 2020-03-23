@@ -131,11 +131,11 @@
         {% if user.is_authenticated %}
             {% if not fav %}
             <form action="{%url 'inspeakers:speaker_profile' speaker.slug%}" method="get">
-              <button type="submit" name="fav" value="1" class="btn btn-primary my-2 px-2">Favourite</button>
+              <button type="submit" name="fav" value="1" class="btn btn-primary my-2 px-2">Add to My Favourites</button>
             </form>
             {% else %}
             <form action="{%url 'inspeakers:speaker_profile' speaker.slug%}" method="get">
-              <button type="submit" name="fav" value="0" class="btn btn-primary my-2 px-2">UnFavourite</button>
+              <button type="submit" name="fav" value="0" class="btn btn-primary my-2 px-2">Remove from My Favourites</button>
             </form>
             {% endif %}
         {% endif %}
@@ -173,5 +173,21 @@
   </div>
 </div>
 
+{% if user.is_authenticated %}
+<div class="card my-4 text-right">
+    <div class="card-body">
+        <div class="row my-2 justify-content-center">
+            <form action="myaccount/" method="get">
+                <button class="btn btn-primary my-2 px-2" type="submit">My Account</button>
+            </form>
+        </div>
+        <div class="row my-2 justify-content-center">
+            <form action="myfavourite/" method="get">
+                <button class="btn btn-primary my-2 px-2">My Favourites</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endif %}
 
 {% endblock %}

@@ -15,6 +15,11 @@ def home(request):
     context_dict['description'] = 'Homepage'
     return render(request, 'inspeakers/home.html', context_dict)
 
+def about(request):
+    context_dict['page']['url'] = 'about'
+    context_dict['description'] = 'About Us'
+    return render(request, 'inspeakers/home/about.html', context_dict)
+
 def rate(request):
     context_dict = get_speakers(request, '-rate', None)
     context_dict['page']['url'] = 'home/rate'
@@ -173,8 +178,6 @@ def speakerprofile(request, speaker_profile_slug):
     context_dict['speaker'] = s
     return render(request,'inspeakers/speakerprofile.html',context_dict)
 
-def about(request):
-    return render(request, 'inspeakers/about.html')
 
 @login_required
 def comment(request,speaker_profile_slug):
