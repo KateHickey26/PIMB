@@ -16,9 +16,7 @@ def home(request):
     return render(request, 'inspeakers/home.html', context_dict)
 
 def about(request):
-    context_dict['page']['url'] = 'about'
-    context_dict['description'] = 'About Us'
-    return render(request, 'inspeakers/home/about.html', context_dict)
+    return render(request, 'inspeakers/about.html')
 
 def rate(request):
     context_dict = get_speakers(request, '-rate', None)
