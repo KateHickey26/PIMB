@@ -14,7 +14,7 @@
 <div class="container">
   <div class="row my-3">
 
-      <div class="col-md-4">
+      <div class="col-md-3">
           <div class="profile-img" style="overflow: hidden; position: relative; width: 300px; height:300">
           <img src="{{ MEDIA_URL }}{{speaker.picture}}" alt="Speaker profile picture" />
           <!--  <img src="https://www.aboutmanchester.co.uk/wp-content/uploads/2018/05/speaker.jpg"
@@ -107,7 +107,25 @@
           </div>
         </div>
       </div>
+      <div class="col-3">
+            {% if user.is_authenticated %}
+            <div class="card my-4 text-right">
+                <div class="card-body">
+                    <div class="row my-2 justify-content-center">
+                        <form action="myaccount/" method="get">
+                            <button class="btn btn-primary my-2 px-2" type="submit">My Account</button>
+                        </form>
+                    </div>
+                    <div class="row my-2 justify-content-center">
+                        <form action="myfavourite/" method="get">
+                            <button class="btn btn-primary my-2 px-2">My Favourites</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
     </div>
+  </div>
 
 
     <div class="row">
@@ -121,8 +139,9 @@
           <strong><p>My Tags</p></strong>
           {% get_tags speaker %}
         </div>
+          {% ratings speaker %}
       </div>
-      <div class="col-md-4 align-self-right">
+      <div class="col-md-4">
         {% if user == speaker.speaker %}
         <form action="{%url 'inspeakers:speaker_profile_edit' %}" method="get">
           <button class="btn btn-primary my-2 px-2">Edit</button>
@@ -160,6 +179,7 @@
       <h2> Leave a Comment </h2>
         {% if user.is_authenticated %}
           <div class='addcomment'>
+              <div class="star-ratings" data-max-rating="5" data-avg-rating="0.000"></div>
             <form id="add_comment" action="{%url 'inspeakers:comment' speaker.slug%}" method="post">
               {% csrf_token %}
               <textarea class="form-control" name="comment"></textarea>
@@ -172,22 +192,5 @@
     </div>
   </div>
 </div>
-
-{% if user.is_authenticated %}
-<div class="card my-4 text-right">
-    <div class="card-body">
-        <div class="row my-2 justify-content-center">
-            <form action="myaccount/" method="get">
-                <button class="btn btn-primary my-2 px-2" type="submit">My Account</button>
-            </form>
-        </div>
-        <div class="row my-2 justify-content-center">
-            <form action="myfavourite/" method="get">
-                <button class="btn btn-primary my-2 px-2">My Favourites</button>
-            </form>
-        </div>
-    </div>
-</div>
-{% endif %}
 
 {% endblock %}
