@@ -1,62 +1,68 @@
 {% extends 'inspeakers/base.html' %}
-{% load static %}
-
+{% load staticfiles %}
+{% load ratings %}
+{% load inspeakers_template_tags %}
 {% block title_block %}
   Speaker profile
 {% endblock %}
-
 {% block body_block %}
+<script type="text/javascript" src="//code.jquery.com/jquery-2.1.0.js"></script>
+<script type="text/javascript" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+<link rel="stylesheet" href="{% static 'star-ratings/css/star-ratings.css' %}">
+<script type="text/javascript" src="{% static 'star-ratings/js/dist/star-ratings.min.js' %}"></script>
 
 <div class="container">
-  <div class="row">
+  <div class="row my-3">
 
-      <div class="col-md-4">
-          <div class="profile-img">
-          <img src="{% static 'images/speakertest.jpg' %}" alt="Speaker profile picture" />
+      <div class="col-md-3">
+          <div class="profile-img" style="overflow: hidden; position: relative; width: 300px; height:300">
+          <img src="{{ MEDIA_URL }}{{speaker.picture}}" alt="Speaker profile picture" />
           <!--  <img src="https://www.aboutmanchester.co.uk/wp-content/uploads/2018/05/speaker.jpg"
         alt="speaker image" height="400" width="250"/> -->
           </div>
+          {% if user == speaker.speaker %}
+          <form action="{% url 'inspeakers:speaker_profile' speaker.slug %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input id="imageUpload" type="file" name="profile_photo" placeholder="Photo" required="" capture>
+            <input class="btn btn-primary my-2 px-2" type="submit" value="Upload">
+          </form>
+          {% endif %}
       </div>
 
       <div class="col-md-6">
         <div class="profile-head">
-          <h5>
-            Speaker Name
-          </h5>
-          <h6>
-            @twitterhandle
-          </h6>
+          <h2 style="height:50px;">
+            {{speaker.name}}
+          </h2>
 
         <div class="tabs">
-          <ul class="nav nav-tabs">
+          <ul class="nav nav-tabs" id="profiletab">
             <li class="nav-item">
-              <a href="#about" class="nav-link active" data-toggle="tab">About</a>
+              <a class="nav-link active" id="about-tab" data-toggle="tab" href="#about" role="tab" aria-controls="about" aria-selected="true">About</a>
             </li>
             <li class="nav-item">
-              <a href="#details" class="nav-link" data-toggle="tab">Booking Details</a>
+              <a class="nav-link" id="deatils-tab" data-toggle="tab" href="#details" role="tab" aria-controls="details" aria-selected="false">Booking Details</a>
             </li>
           </ul>
-
           <div class="col-md-8">
-            <div class="tab-content">
-              <div class="tab-pane fade show active" id="about">
+            <div class="tab-content" style="height:300px; overflow:auto; width:500px">
+              <div class="tab-pane fade show active" aria-labelledby="about-tab" id="about">
                 <div class="row">
                   <div class="col-md-12">
                     <label>Your Bio</label><br/>
-                      <p>This will be a big long bio about the speaker. How will they be able to edit it themselves? I'm not sure. That will be fun to figure out.
-                          Words words and more words to act as filler to make this page look good for now. Hopefully it works...</p>
+                      <p>{{speaker.description}}</p>
                   </div>
                 </div>
               </div>
 
-            <div class="tab-pane fade" id="details">
+            <div class="tab-pane fade" aria-labelledby="details-tab" id="details">
 
                     <div class="row">
                       <div class="col-md-6">
                         <label>Management Company</label>
                       </div>
                       <div class="col-md-6">
-                        <p>Merv Castaldo Management</p>
+                        <p>{{speaker.company}}</p>
                       </div>
                     </div>
 
@@ -65,7 +71,7 @@
                         <label>Email</label>
                       </div>
                         <div class="col-md-6">
-                          <p>bookings@mervcastaldomanagement.com</p>
+                          <p>{{speaker.email}}</p>
                         </div>
                     </div>
 
@@ -74,7 +80,7 @@
                           <label>Phone</label>
                         </div>
                           <div class="col-md-6">
-                            <p>012 3456 789</p>
+                            <p>{{speaker.phone}}</p>
                           </div>
                       </div>
 
@@ -83,7 +89,7 @@
                             <label>Experience</label>
                               </div>
                               <div class="col-md-6">
-                                  <p>Expert</p>
+                                  <p>{{speaker.experience}}</p>
                           </div>
                         </div>
 
@@ -92,7 +98,7 @@
                             <label>Hourly Rate</label>
                           </div>
                             <div class="col-md-6">
-                              <p>£70/hr</p>
+                              <p>{{speaker.hourlyrate}}</p>
                             </div>
                         </div>
                 </div>
@@ -101,74 +107,91 @@
           </div>
         </div>
       </div>
+      <div class="col-3">
+            {% if user.is_authenticated %}
+            <div class="card my-4 text-right">
+                <div class="card-body">
+                    <div class="row my-2 justify-content-center">
+                        <form action="myaccount/" method="get">
+                            <button class="btn btn-primary my-2 px-2" type="submit">My Account</button>
+                        </form>
+                    </div>
+                    <div class="row my-2 justify-content-center">
+                        <form action="myfavourite/" method="get">
+                            <button class="btn btn-primary my-2 px-2">My Favourites</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
     </div>
+  </div>
 
 
     <div class="row">
-      <div class="col-md-4">
+      <div class="col-md-8">
         <div class="profile-work">
           <strong><p>Check Me Out</p></strong>
-          <a href="">YouTube Link</a><br/>
-          <a href="">@twitterhandle</a><br/>
-          <a href="">@instagram</a><br/>
-          <a href-"">Website Link</a></<br>
-          <strong><p>My Specialities</p></strong>
-          <a>Corporate Events</a><br/>
-          <a>Divorce Parties</a><br/>
-          <a>Corporate Retreats</a><br/>
-          <a>ECommerce conferences</a><br/>
+          <a href="{{speaker.youtube}}">Youtube</a><br/>
+          <a href="{{speaker.twitter}}">@Twitter</a><br/>
+          <a href="{{speaker.ins}}">@Instagram</a><br/>
+          <a href="{{speaker.website}}">Website</a><br/>
+          <strong><p>My Tags</p></strong>
+          {% get_tags speaker %}
         </div>
+          <strong><p>My Ratings</p></strong>
+          {% ratings speaker %}
+      </div>
+      <div class="col-md-4">
+        {% if user == speaker.speaker %}
+        <form action="{%url 'inspeakers:speaker_profile_edit' %}" method="get">
+          <button class="btn btn-primary my-2 px-2">Edit</button>
+        </form>
+        {% endif %}
+        {% if user.is_authenticated %}
+            {% if not fav %}
+            <form action="{%url 'inspeakers:speaker_profile' speaker.slug%}" method="get">
+              <button type="submit" name="fav" value="1" class="btn btn-primary my-2 px-2">Add to My Favourites</button>
+            </form>
+            {% else %}
+            <form action="{%url 'inspeakers:speaker_profile' speaker.slug%}" method="get">
+              <button type="submit" name="fav" value="0" class="btn btn-primary my-2 px-2">Remove from My Favourites</button>
+            </form>
+            {% endif %}
+        {% endif %}
       </div>
     </div>
 </div>
 
-<div class="container">
-  <div class="row">
-    <div class="col-md-8 card mb-4  mt-3 left  top">
-      <div class="card-body">
-        <h1>{% block title %} {{ post.title }} {% endblock title %}</h1>
-        <p class=" text-muted">{{ post.author }} | {{ post.created_on }}</p>
-        <p class="card-text ">{{ post.content | safe }}</p>
-      </div>
-    </div>
-    {% block sidebar %} {% include 'sidebar.html' %} {% endblock sidebar %}
 
+<div class='comments' id='comments'>
+  <div class="row justify-content-center">
     <div class="col-md-8 card mb-4  mt-3 ">
-      <div class="card-body">
+        <h2>Comments</h2>
+
+      <div class='previous_comments'>
         <!-- comments -->
-        <h2>{{ comments.count }} comments</h2>
+      <h3> Previous Reviews </h3>
+        <ul>
+          {% get_reviews speaker %}
+        </ul>
+      </div>
 
-        {% for comment in comments %}
-        <div class="comments" style="padding: 10px;">
-          <p class="font-weight-bold">
-            {{ comment.name }}
-            <span class=" text-muted font-weight-normal">
-              {{ comment.created_on }}
-            </span>
-          </p>
-          {{ comment.body | linebreaks }}
-        </div>
-        {% endfor %}
-      </div>
-    </div>
-    <div class="col-md-8 card mb-4  mt-3 ">
-      <div class="card-body">
-        {% if new_comment %}
-        <div class="alert alert-success" role="alert">
-          Your comment is awaiting moderation
-        </div>
+      <h2> Leave a Comment </h2>
+        {% if user.is_authenticated %}
+          <div class='addcomment'>
+              <div class="star-ratings" data-max-rating="5" data-avg-rating="0.000"></div>
+            <form id="add_comment" action="{%url 'inspeakers:comment' speaker.slug%}" method="post">
+              {% csrf_token %}
+              <textarea class="form-control" name="comment"></textarea>
+              <button class="btn btn-primary my-2"><span>Save Comment</span></button>
+          </form>
+          </div>
         {% else %}
-        <h3>Leave a comment</h3>
-        <form method="post" style="margin-top: 1.3em;">
-          {{ comment_form.as_p }}
-          {% csrf_token %}
-          <button type="submit" class="btn btn-primary  btn-lg">Submit</button>
-        </form>
-        {% endif %}
-      </div>
+        <a href="{% url 'inspeakers:login' %}">Please log in to leave a new comment! </a>
+         {% endif %}
     </div>
   </div>
 </div>
 
-  
 {% endblock %}

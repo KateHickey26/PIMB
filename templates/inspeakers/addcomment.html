@@ -1,0 +1,13 @@
+
+<form id="add_comment" method="post">
+    {% csrf_token %}
+    {{ form.content }}
+    <span class ="email">
+    Enter your email address:
+    {{ form.email }}
+
+    {% with rating_type='form_rating' rating_style='big' rating_initial=form.rating.value %}
+        {% include 'inspeakers/starrating.html' %}
+    {% endwith %}
+    <span class= "ar_reviewsubmit"> <a id='add-review-btn' class='button'><span>Save Comment</span></a></span>
+</form>
