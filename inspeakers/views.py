@@ -7,6 +7,7 @@ from django.urls import reverse
 from inspeakers.models import *
 from datetime import datetime
 from inspeakers.forms import UserForm
+import copy
 
 # Create your views here.
 def home(request):
@@ -155,9 +156,14 @@ def speakerprofileedit(request):
         profile.ins = ins
         profile.website = website
         tags = tags.split(';')
+        old = copy.copy(profile.tags.all())
+        profile.tags.clear()
         for t in tags:
             o = Tag.objects.get_or_create(name=t)[0]
             profile.tags.add(o)
+        for t in old:
+            if not t.speakerprofile_set.all().exists():
+                t.delete()
         profile.save()
     else:
         try:
@@ -175,7 +181,7 @@ def speakerprofileedit(request):
     except:
         None
     context['tags'] = s
-    return render(request,'inspeakers/speakerprofile.html',context)
+    return render(request,'inspeakers/edit.html',context)
 
 @login_required
 def comment(request,speaker_profile_slug):
