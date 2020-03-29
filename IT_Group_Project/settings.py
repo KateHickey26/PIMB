@@ -30,7 +30,7 @@ SECRET_KEY = 'vg7u$&p=bf1-zd19)zar)$orq=4(-lkvbw7==zi@%n0&lxjt=7'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['2496641y.pythonanywhere.com','127.0.0.1']
 
 
 # Application definition

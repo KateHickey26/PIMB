@@ -7,11 +7,12 @@ from django.urls import reverse
 from inspeakers.models import *
 from datetime import datetime
 from inspeakers.forms import UserForm
+from star_ratings.models import *
 import copy
 
 # Create your views here.
 def home(request):
-    context_dict = get_speakers(request, 'name', None)
+    context_dict = get_speakers(request, None, None)
     context_dict['page']['url'] = 'home'
     context_dict['description'] = 'Homepage'
     return render(request, 'inspeakers/home.html', context_dict)
@@ -26,7 +27,7 @@ def rate(request):
     return render(request, 'inspeakers/home.html', context_dict)
 
 def tag(request, tag_name_slug):
-    context_dict = get_speakers(request, 'name', tag_name_slug)
+    context_dict = get_speakers(request, None, tag_name_slug)
     context_dict['page']['url'] = 'home/tag/'+tag_name_slug
     context_dict['description'] = 'Tag: ' + tag_name_slug
     return render(request, 'inspeakers/home.html', context_dict)
@@ -49,10 +50,19 @@ def get_speakers(request, order, tag, user = None):
         page = 1
     else:
         page = int(page)
-    if order is None:
-        order='name'
 
-    if user is not None:
+    speakers = []
+
+    if order == "-favcount":
+        speakers = SpeakerProfile.objects.order_by(order)
+    elif order == "-rate":
+        rates = Rating.objects.order_by("-average")
+        print(rates)
+        speakers = []
+        for r in rates:
+            speakers.append(r.content_object)
+
+    elif user is not None:
         try:
             speakers = []
             sp = Favourite.objects.filter(user=user)
@@ -60,16 +70,19 @@ def get_speakers(request, order, tag, user = None):
                 speakers.append(s.speakers)
         except:
             speakers = []
-    elif tag is None:
-        speakers = SpeakerProfile.objects.order_by(order)
-    else:
+    elif tag is not None:
         t = Tag.objects.get(slug=tag)
-        speakers = SpeakerProfile.objects.filter(tags=t).order_by(order)
-
+        speakers = SpeakerProfile.objects.filter(tags=t)
+    elif order is None:
+        speakers = SpeakerProfile.objects.all()
     try:
-        context_dict = {'speakers': speakers[(page-1)*max_result: (page)*max_result]}
+        if len(speakers) > (page)* max_result:
+            context_dict = {'speakers': speakers[(page-1)*max_result: (page)*max_result]}
+        else:
+            context_dict = {'speakers': speakers[(page - 1) * max_result:]}
     except:
         context_dict = {}
+
     if page <= 1:
         context_dict['page'] = {'previous':1}
     else:
@@ -104,7 +117,6 @@ def speakerprofile(request, speaker_profile_slug):
     s = SpeakerProfile.objects.get(slug=speaker_profile_slug)
     context_dict={}
     if user.is_authenticated :
-        profile = SpeakerProfile.objects.get(speaker=user)
         if fav == '0':
             Favourite.objects.filter(user=user).filter(speakers=s).delete()
         elif fav == '1':
@@ -119,6 +131,10 @@ def speakerprofile(request, speaker_profile_slug):
         print(s.favcount)
         s.save()
         if request.method == 'POST':
+            try:
+                profile = SpeakerProfile.objects.get(speaker=user)
+            except:
+                profile = None
             if 'profile_photo' in request.FILES:
                 profile.picture = request.FILES['profile_photo']
             profile.save()
