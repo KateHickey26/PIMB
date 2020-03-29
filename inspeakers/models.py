@@ -11,20 +11,6 @@ class UserProfile(models.Model):
 
     favs = models.ManyToManyField("SpeakerProfile")
 
-    USER = 'u'
-    SPEAKER = 'sp'
-    ADMIN = 'a'
-    BASIC = 'u'
-
-
-    USER_TYPES = (
-        (USER, 'Basic User'),
-        (SPEAKER, 'Speaker'),
-        (ADMIN, 'Administrator'),
-    )
-
-    user_type = models.CharField(max_length=2,choices=USER_TYPES,default=BASIC)
-
     def __str__(self):
         return self.user.username
 
