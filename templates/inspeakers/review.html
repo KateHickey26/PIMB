@@ -1,0 +1,26 @@
+{% load staticfiles %}
+{% if comments %}
+    {% for review in comments %}
+    <div class="row mx-1 my-2" style="border-style:solid;border-width:1px;">
+        <div class="col-3 mx-2 my-2" style="border-style:dashed;border-width:1px;">
+            <div class="row mx-2 my-2">
+                <img src="/media/{{ review.user.profile_image }}" style="width:50px;" alt='Image'/>
+            </div>
+            <div class="row mx-2 my-2">
+                <div>
+                    <div>{{ review.user.user.username}}</div>
+                    <div>{{ review.date }}</div>
+                    <div>To:<a href="{% url 'inspeakers:speaker_profile' review.speaker.slug%}"> {{ review.speaker.name}}</a></div>
+               </div>
+            </div>
+        </div>
+        <div class="col-8 mx-2 my-2" style="border-style:solid;border-width:1px;">
+            <div class="col mx-2 my-2">
+            {{ review.body }}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+{% else %}
+    <strong> There are no comments present</strong>
+{% endif %}
