@@ -1,76 +1,282 @@
 from django.shortcuts import render
+from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.shortcuts import redirect
+from django.urls import reverse
 from inspeakers.models import *
+from datetime import datetime
+from inspeakers.forms import UserForm
+import copy
 
 
 # Create your views here.
 def home(request):
+    context_dict = get_speakers(request, 'name', None)
+    context_dict['page']['url'] = 'home'
+    context_dict['description'] = 'Homepage'
+    return render(request, 'inspeakers/home.html', context_dict)
+
+def about(request):
+    return render(request, 'inspeakers/about.html')
+
+def rate(request):
+    context_dict = get_speakers(request, '-rate', None)
+    context_dict['page']['url'] = 'home/rate'
+    context_dict['description'] = 'Top Rated'
+    return render(request, 'inspeakers/home.html', context_dict)
+
+def tag(request, tag_name_slug):
+    context_dict = get_speakers(request, 'name', tag_name_slug)
+    context_dict['page']['url'] = 'home/tag/'+tag_name_slug
+    context_dict['description'] = 'Tag: ' + tag_name_slug
+    return render(request, 'inspeakers/home.html', context_dict)
+
+def mfav(request):
+    context_dict = get_speakers(request, '-favcount', None)
+    context_dict['page']['url'] = 'home/fav'
+    context_dict['description'] = 'Most Liked'
+    return render(request, 'inspeakers/home.html', context_dict)
+
+
+def get_speakers(request, order, tag, user = None):
     page = request.GET.get('page')
     max_result = request.GET.get('max_result')
-    order = request.GET.get('order')
-    tag = request.GET.get('tag')
     if max_result is None:
         max_result = 3
+    else:
+        max_result = int(max_result)
     if page is None:
         page = 1
+    else:
+        page = int(page)
     if order is None:
         order='name'
-    context_dict = {}
-    context_dict['speakers'] = get_speakers(max_result,page,order,tag)['speakers']
-    return render(request,'inspeakers/home.html',context_dict)
 
-
-def get_speakers(max_result, page, order, tag):
-    if tag is None:
-        return {'speakers': SpeakerProfile.objects.order_by(order)[(page-1)*max_result: (page)*max_result]}
+    if user is not None:
+        try:
+            speakers = []
+            sp = Favourite.objects.filter(user=user)
+            for s in sp:
+                speakers.append(s.speakers)
+        except:
+            speakers = []
+    elif tag is None:
+        speakers = SpeakerProfile.objects.order_by(order)
     else:
-        t = Tag.objects.get(name=tag)
-        return {'speakers': SpeakerProfile.objects.filter(tags=t).order_by(order)[(page - 1) * max_result: (page) * max_result]}
+        t = Tag.objects.get(slug=tag)
+        speakers = SpeakerProfile.objects.filter(tags=t).order_by(order)
+
+    try:
+        context_dict = {'speakers': speakers[(page-1)*max_result: (page)*max_result]}
+    except:
+        context_dict = {}
+    if page <= 1:
+        context_dict['page'] = {'previous':1}
+    else:
+        context_dict['page'] = {'previous':page-1}
+    num = int(len(speakers)/max_result)
+    if len(speakers)%max_result > 0:
+        num += 1
+    context_dict['page']['next'] = page + 1
+    pages = []
+    if num >= page + 2:
+        pages.append({'num': page})
+        pages.append({'num': page + 1})
+        pages.append({'num': page + 2})
+    elif num == page + 1:
+        if page - 1 > 0:
+            pages.append({'num': page - 1})
+        pages.append({'num': page})
+        pages.append({'num': page + 1})
+    elif num <= page:
+        if num - 2 > 0:
+            pages.append({'num': num - 2})
+        if num - 1 > 0:
+            pages.append({'num': num - 1})
+        pages.append({'num': num})
+        context_dict['page']['next'] = num
+    context_dict['pages'] = pages
+    return context_dict
 
 def speakerprofile(request, speaker_profile_slug):
-    s = SpeakerProfile.objects.get(slug = speaker_profile_slug)
+    fav = request.GET.get('fav')
+    user = request.user
+    s = SpeakerProfile.objects.get(slug=speaker_profile_slug)
     context_dict={}
+    if user.is_authenticated :
+        profile = SpeakerProfile.objects.get(speaker=user)
+        if fav == '0':
+            Favourite.objects.filter(user=user).filter(speakers=s).delete()
+        elif fav == '1':
+            f = Favourite.objects.get_or_create(user=user,speakers=s)[0]
+            f.save()
+
+        if Favourite.objects.filter(user=user).filter(speakers=s).exists():
+            context_dict['fav'] = True
+        else:
+            context_dict['fav'] = False
+        s.favcount = Favourite.objects.filter(speakers=s).count()
+        print(s.favcount)
+        s.save()
+        if request.method == 'POST':
+            if 'profile_photo' in request.FILES:
+                profile.picture = request.FILES['profile_photo']
+            profile.save()
+        user.save()
+    else:
+        context_dict['fav'] = None
     context_dict['speaker'] = s
     return render(request,'inspeakers/speakerprofile.html',context_dict)
 
-def post_detail(request, slug):
-    template_name = 'post_detail.html'
-    post = get_object_or_404(Post, slug=slug)
-    comments = post.comments.filter(active=True) # retrieves all approved comments from the database
-    new_comment = None
+@login_required
+def speakerprofileedit(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        description = request.POST.get('about')
+        company = request.POST.get('company')
+        email = request.POST.get('email')
+        phone = request.POST.get('phone')
+        experience = request.POST.get('experience')
+        hourlyrate = request.POST.get('hourlyrate')
+        youtube = request.POST.get('youtube')
+        twitter = request.POST.get('twitter')
+        ins = request.POST.get('ins')
+        website = request.POST.get('website')
+        tags = request.POST.get('tags')
+        profile = SpeakerProfile.objects.get_or_create(speaker=request.user)[0]
+        profile.name = name
+        profile.description = description
+        profile.company = company
+        profile.email = email
+        profile.phone= phone
+        profile.experience = experience
+        profile.hourlyrate = hourlyrate
+        profile.youtube = youtube
+        profile.twitter = twitter
+        profile.ins = ins
+        profile.website = website
+        tags = tags.split(';')
+        old = copy.copy(profile.tags.all())
+        profile.tags.clear()
+        for t in tags:
+            o = Tag.objects.get_or_create(name=t)[0]
+            profile.tags.add(o)
+        for t in old:
+            if not t.speakerprofile_set.all().exists():
+                t.delete()
+        profile.save()
+    else:
+        try:
+            profile = SpeakerProfile.objects.get(speaker=request.user)
+        except:
+            profile = None
+    context={}
+    context['speaker'] = profile
+    sl = []
+    s = ""
+    try:
+        for t in profile.tags.all():
+            sl.append(t.name)
+            s = ";".join(sl)
+    except:
+        None
+    context['tags'] = s
+    return render(request,'inspeakers/edit.html',context)
+
+@login_required
+def comment(request,speaker_profile_slug):
     # Comment posted
     if request.method == 'POST':
-        comment_form = CommentForm(data=request.POST)
-        if comment_form.is_valid():
-
-            # Create Comment object but don't save to database yet
-            new_comment = comment_form.save(commit=False)
-            # Assign the current post to the comment
-            new_comment.post = post
-            # Save the comment to the database
-            new_comment.save()
-    else:
-        comment_form = CommentForm()
-
-    return render(request, template_name, {'post': post,
-                                           'comments': comments,
-                                           'new_comment': new_comment,
-                                           'comment_form': comment_form})
+        comment_text = request.POST.get('comment')
+        time = str(datetime.now())[0:10]
+        user = UserProfile.objects.get(user=request.user)
+        speaker = SpeakerProfile.objects.get(slug=speaker_profile_slug)
+        Comment.objects.create(user=user, body=comment_text, date=time, speaker=speaker)
+    return render(request, 'inspeakers/speakerprofile.html',context)
 
 def sign_up(request):
-    return render(request, 'inspeakers/signup.html')
+    registered = False
+    if request.method == 'POST':
+        user_form = UserForm(request.POST)
+        if user_form.is_valid():
+            user = user_form.save()
+            user.set_password(user.password)
+            user.save()
+            profile = UserProfile.objects.create(user=user)
+            if 'picture' in request.FILES:
+                profile.profile_image = request.FILES['picture']
+            profile.save()
+            registered = True
+        else:
+            print(user_form.errors)
+    else:
+        user_form = UserForm()
+    return render(request,'inspeakers/signup.html')
+
 def user_login(request):
-    return render(request, 'inspeakers/login.html')
+    if request.method == 'POST':
+        username = request.POST.get('uname')
+        password = request.POST.get('psw')
+        user = authenticate(username=username, password=password)
+        if user:
+            if user.is_active:
+                login(request, user)
+                return redirect(reverse('inspeakers:home'))
+            else:
+                return HttpResponse("Your Inspeakers account is disabled.")
+        else:
+            print(f"Invalid login details: {username}, {password}")
+            return HttpResponse("Invalid login details supplied.")
+    else:
+        return render(request, 'inspeakers/login.html')
+
 @login_required
 def my_account(request):
-    return render(request, 'inspeakers/myaccount.html')
+    user = request.user
+    profile = UserProfile.objects.get(user=user)
+    if request.method == 'POST':
+        newname = request.POST.get('username')
+        newpsw = request.POST.get('password')
+        print(request.FILES)
+        if newname is not "":
+            user.username = newname
+        if newpsw is not "":
+            user.set_password(newpsw)
+        if 'profile_photo' in request.FILES:
+            profile.profile_image = request.FILES['profile_photo']
+        user.save()
+        profile.save()
+    context_dict={}
+    if profile.profile_image is not None:
+        context_dict['picture'] = profile.profile_image
+    else:
+        context_dict['picture'] = ""
+    try:
+        s = SpeakerProfile.objects.get(speaker=user)
+    except:
+        s = None
+    if s is not None:
+        context_dict['created'] = True
+        context_dict['myslug'] = s.slug
+    else:
+        context_dict['created'] = False
+    return render(request, 'inspeakers/myaccount.html',context_dict)
 # at the moment, review is part of the speaker profile page
 # we can't control "login required" with this method
 # possibly open a new page to add a review?
 @login_required
-def add_review(request):
-    return
+def my_favourite(request):
+    context_dict = get_speakers(request,None,None,request.user)
+    context_dict['page']['url'] = 'home'
+    context_dict['description'] = 'My favourite'
+    return render(request, 'inspeakers/home.html', context_dict)
+
+@login_required
+def my_reviews(request):
+    return render(request,'inspeakers/myreviews.html')
+
 @login_required
 def user_logout(request):
-    return
+    logout(request)
+    return redirect(reverse('inspeakers:home'))
