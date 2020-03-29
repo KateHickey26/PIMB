@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-{% load staticfiles %}
+{% load static %}
 {% load inspeakers_template_tags %}
 <html lang="en">
 <meta name="google-site-verification" content="9uk58ZbxJsMQOlKd_3NZ9nFYwDdCPecouzQyH9hsul4" />
@@ -8,7 +8,7 @@
   <head>
     <meta charset="UTF-8">
     <title>
-        Inspiring Speakers ——
+        Inspirational Speakers ——
     {% block title_block %}
     {% endblock %}
     </title>
@@ -19,8 +19,8 @@
       <div class="container" name="header" >
             <div class="row">
                 <div class="col-8 align-self-center">
-                    <h1 class="row mx-2 my-2 py-2" name="title"><font size="20">Inspiring Speakers</font></h1>
-                    <div style="overflow: auto; width:100%;">
+                    <h1 class="row mx-2 my-2 py-2" name="title"><font size="20">Inspirational Speakers</font></h1>
+                    <div style="">
                     <div class="row mx-2 my-2 py-2" name="tagline" style="height:100%;">
                         {% block tags_block %}
                             {% get_tags %}

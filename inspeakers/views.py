@@ -3,6 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from inspeakers.models import *
 
+
 # Create your views here.
 def home(request):
     page = request.GET.get('page')

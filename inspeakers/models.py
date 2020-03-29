@@ -3,6 +3,8 @@ from django.contrib.auth.models import User
 from django.urls import reverse
 from django.template.defaultfilters import slugify
 # Create your models here.
+
+
 class UserProfile(models.Model):
     # Links UserProfile to a User model instance.
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -11,6 +13,7 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return self.user.username
+
 
 class SpeakerProfile(models.Model):
     speaker = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -35,6 +38,7 @@ class SpeakerProfile(models.Model):
     def __str__(self):
         return self.speaker.username
 
+
 class Comment(models.Model):
     post = models.ForeignKey(SpeakerProfile,on_delete=models.CASCADE,related_name='comments')
     name = models.CharField(max_length=80)
@@ -49,8 +53,12 @@ class Comment(models.Model):
     def __str__(self):
         return 'Comment {} by {}'.format(self.body, self.name)
 
+
 class Tag(models.Model):
     name = models.CharField(max_length=20)
     popularity = models.IntegerField(default=0)
+
     def __str__(self):
         return self.tag
+
+
