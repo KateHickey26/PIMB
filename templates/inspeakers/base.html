@@ -2,70 +2,174 @@
 {% load static %}
 {% load inspeakers_template_tags %}
 <html lang="en">
-<meta name="google-site-verification" content="9uk58ZbxJsMQOlKd_3NZ9nFYwDdCPecouzQyH9hsul4" />
+<meta name="google-site-verification" content="9uk58ZbxJsMQOlKd_3NZ9nFYwDdCPecouzQyH9hsul4"/>
 <script async src="https://cse.google.com/cse.js?cx=002858639642519775440:wqougxmojpz"></script>
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-  <head>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+<link rel="stylesheet" href="{% static 'css/Footer.css' %}">
+<head>
     <meta charset="UTF-8">
     <title>
         Inspirational Speakers ——
-    {% block title_block %}
-    {% endblock %}
+        {% block title_block %}
+        {% endblock %}
     </title>
-      <base href="/inspeakers/">
-  </head>
-  <body>
-    <header style="background-color: #D0D0D0;">
-      <div class="container" name="header" >
-            <div class="row">
-                <div class="col-8 align-self-center">
-                    <h1 class="row mx-2 my-2 py-2" name="title"><font size="20">Inspirational Speakers</font></h1>
-                    <div style="">
+    <base href="/inspeakers/">
+</head>
+<body>
+<header style="background-color: #D0D0D0;">
+    <div class="container" name="header">
+        <div class="row">
+            <div class="col-8 align-self-center">
+                <h1 class="row mx-2 my-2 py-2" name="title"><font size="20">Inspirational Speakers</font></h1>
+                <div style="">
                     <div class="row mx-2 my-2 py-2" name="tagline" style="height:100%;">
                         {% block tags_block %}
                             {% get_tags %}
                         {% endblock %}
                     </div>
-                    </div>
                 </div>
-                <div class="col-4 align-self-center">
-                    <div class="row mx-2 mt-4 md-2 py-2 justify-content-end" name="login" >
-                        <form method="get" action="login">
-                            <button class="btn btn-outline-primary px-4">Login</button>
-                        </form>
-                    </div>
-                    <div class="row mx-2 my-2 py-2 justify-content-end" name="search" >
-                        <div style="width:100%;">
-                            <div class="gcse-searchbox-only"></div>
-                        </div>
+            </div>
+            <div class="col-4 align-self-center">
+                <div class="row mx-2 mt-4 md-2 py-2 justify-content-end" name="login">
+                    <form method="get" action="login">
+                        <button class="btn btn-outline-primary px-4">Login</button>
+                    </form>
+                </div>
+                <div class="row mx-2 my-2 py-2 justify-content-end" name="search">
+                    <div style="width:100%;">
+                        <div class="gcse-searchbox-only"></div>
                     </div>
                 </div>
             </div>
         </div>
-        <nav style="background-color: #F0F8FF; border-style: solid; border-width: 1px 0px 1px 0px; border-color: #F0FFFF;">
-            <div class="nav my-1 justify-content-center" >
-                <li class="nav-item">
+    </div>
+    <nav style="background-color: #F0F8FF; border-style: solid; border-width: 1px 0px 1px 0px; border-color: #F0FFFF;">
+        <div class="nav my-1 justify-content-center">
+            <li class="nav-item">
                 <a class="nav-link" href="#">About Us</a>
-                </li>
-                <li class="nav-item">
+            </li>
+            <li class="nav-item">
                 <a class="nav-link" href="home">Home</a>
-                </li>
-                <li class="nav-item">
+            </li>
+            <li class="nav-item">
                 <a class="nav-link" href="home?order=rate">Top Rated Speaker</a>
-                </li>
-                <li class="nav-item">
+            </li>
+            <li class="nav-item">
                 <a class="nav-link" href="#">Speakers in My Area</a>
+            </li>
+        </div>
+    </nav>
+</header>
+<div>
+    {% block body_block %}
+
+    {% endblock %}
+</div>
+<div>
+    {% block sidebar_block %}
+    {% endblock %}
+</div>
+<div>
+
+    <footer class="page-footer font-small unique-color-dark pt-4">
+
+
+        <div class="container">
+
+
+            <ul class="list-unstyled list-inline text-center py-2">
+                <li class="list-inline-item">
+                    <h5 class="mb-1">Not registered?</h5>
                 </li>
+                <li class="list-inline-item">
+                    <a href="#!" class="btn btn-outline-white btn-rounded">Click here to create an account</a>
+                </li>
+            </ul>
+
+
+        </div>
+
+        <footer class="page-footer font-small unique-color-dark">
+
+            <div style="background-color: #4285F4;">
+                <div class="container">
+                    <div class="row py-4 d-flex align-items-center">
+                        <div class="col-md-6 col-lg-5 text-center text-md-left mb-4 mb-md-0">
+                            <h6 class="text-light">Welcome to our Inspirational Speaker Community!</h6>
+                        </div>
+                        <div class="col-md-6 col-lg-7 text-center text-md-right">
+
+
+                        </div>
+
+
+                    </div>
+
+                </div>
             </div>
-        </nav>
-    </header>
-    <div>
-      {% block body_block %}
-      {% endblock %}
-    </div>
-    <div>
-      {% block sidebar_block %}
-      {% endblock %}
-    </div>
-  </body>
+
+
+            <div class="container text-center text-md-left mt-5">
+
+
+                <div class="row mt-3">
+
+
+                    <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
+
+
+                        <h6 class="text-uppercase  font-weight-bold">Company name</h6>
+                        <hr class="deep-purple accent-2 mb-4 mt-0 d-inline-block mx-auto" style="width: 120px;">
+                        <p class="text-justify"> Inspirational Speakers is a PLC registered in Glasgow, UK. Our goal
+                            is to match losers with winners, so that you too can learn how to get to the top.
+                            Join us on social media or contact us through the channels provided. </p>
+
+                    </div>
+
+                    <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
+
+                        <h6 class="text-uppercase font-weight-bold">Other Pages</h6>
+                        <hr class="deep-purple accent-2 mb-4 mt-0 d-inline-block mx-auto" style="width: 60px;">
+                        <p>
+                            <a href="">Your Account</a>
+                        </p>
+                        <p>
+                            <a href="#!">Top Rated Speakers</a>
+                        </p>
+                        <p>
+                            <a href="#!">Login Page</a>
+                        </p>
+                        <p>
+                            <a href="#!">Help</a>
+                        </p>
+
+                    </div>
+
+                    <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
+
+
+                        <h6 class="text-uppercase font-weight-bold">Contact</h6>
+                        <hr class="deep-purple accent-2 mb-4 mt-0 d-inline-block mx-auto" style="width: 60px;">
+                        <p>
+                            <i class=""></i> Glasgow University, UK </p>
+                        <p>
+                            <i class=""></i> inspeakers@glasgow.ac.uk</p>
+                        <p>
+                            <i class=""></i> 0141 123 456</p>
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+            <div class="footer-copyright text-center py-3">© 2020 Copyright:
+                <a href=""> InspirationalSpeakers.com</a>
+            </div>
+        </footer>
+        </footer>
+</div>
+</body>
 </html>
