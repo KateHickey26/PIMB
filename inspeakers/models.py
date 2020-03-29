@@ -54,8 +54,6 @@ class Comment(models.Model):
     rating = models.PositiveSmallIntegerField(blank=True, null=True)
     body = models.TextField(blank=True)
     created_on = models.DateTimeField(auto_now_add=True)
-    #active = models.BooleanField(default=False) #to prevent spam, and manually allow comments, set to false
-
 
     class Meta:
         ordering = ['created_on']
