@@ -96,6 +96,37 @@ def get_speakers(request, order, tag, user = None):
         context_dict['page']['next'] = num
     context_dict['pages'] = pages
     return context_dict
+
+def speakerprofile(request, speaker_profile_slug):
+    fav = request.GET.get('fav')
+    user = request.user
+    s = SpeakerProfile.objects.get(slug=speaker_profile_slug)
+    context_dict={}
+    if user.is_authenticated :
+        profile = SpeakerProfile.objects.get(speaker=user)
+        if fav == '0':
+            Favourite.objects.filter(user=user).filter(speakers=s).delete()
+        elif fav == '1':
+            f = Favourite.objects.get_or_create(user=user,speakers=s)[0]
+            f.save()
+
+        if Favourite.objects.filter(user=user).filter(speakers=s).exists():
+            context_dict['fav'] = True
+        else:
+            context_dict['fav'] = False
+        s.favcount = Favourite.objects.filter(speakers=s).count()
+        print(s.favcount)
+        s.save()
+        if request.method == 'POST':
+            if 'profile_photo' in request.FILES:
+                profile.picture = request.FILES['profile_photo']
+            profile.save()
+        user.save()
+    else:
+        context_dict['fav'] = None
+    context_dict['speaker'] = s
+    return render(request,'inspeakers/speakerprofile.html',context_dict)
+
 @login_required
 def speakerprofileedit(request):
     if request.method == 'POST':
@@ -144,38 +175,7 @@ def speakerprofileedit(request):
     except:
         None
     context['tags'] = s
-    return render(request,'inspeakers/edit.html',context)
-
-def speakerprofile(request, speaker_profile_slug):
-    fav = request.GET.get('fav')
-    user = request.user
-    s = SpeakerProfile.objects.get(slug=speaker_profile_slug)
-    context_dict={}
-    if user.is_authenticated :
-        profile = SpeakerProfile.objects.get(speaker=user)
-        if fav == '0':
-            Favourite.objects.filter(user=user).filter(speakers=s).delete()
-        elif fav == '1':
-            f = Favourite.objects.get_or_create(user=user,speakers=s)[0]
-            f.save()
-
-        if Favourite.objects.filter(user=user).filter(speakers=s).exists():
-            context_dict['fav'] = True
-        else:
-            context_dict['fav'] = False
-        s.favcount = Favourite.objects.filter(speakers=s).count()
-        print(s.favcount)
-        s.save()
-        if request.method == 'POST':
-            if 'profile_photo' in request.FILES:
-                profile.picture = request.FILES['profile_photo']
-            profile.save()
-        user.save()
-    else:
-        context_dict['fav'] = None
-    context_dict['speaker'] = s
-    return render(request,'inspeakers/speakerprofile.html',context_dict)
-
+    return render(request,'inspeakers/speakerprofile.html',context)
 
 @login_required
 def comment(request,speaker_profile_slug):
@@ -186,7 +186,7 @@ def comment(request,speaker_profile_slug):
         user = UserProfile.objects.get(user=request.user)
         speaker = SpeakerProfile.objects.get(slug=speaker_profile_slug)
         Comment.objects.create(user=user, body=comment_text, date=time, speaker=speaker)
-    return HttpResponse("Success Comment")
+    return HttpResponse("Comment Successful")
 
 def sign_up(request):
     registered = False

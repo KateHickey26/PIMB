@@ -6,7 +6,7 @@ from inspeakers.models import UserProfile
 from datetime import datetime, date
 
 
-# forms for user login, signup, and profile?
+# forms for user login, signup, and profile
 
 class UserForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput())
@@ -23,4 +23,3 @@ class UploadFileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
         fields = {'profile_image'}
-
