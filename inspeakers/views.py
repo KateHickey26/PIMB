@@ -186,7 +186,7 @@ def comment(request,speaker_profile_slug):
         user = UserProfile.objects.get(user=request.user)
         speaker = SpeakerProfile.objects.get(slug=speaker_profile_slug)
         Comment.objects.create(user=user, body=comment_text, date=time, speaker=speaker)
-    return HttpResponse("Comment Successful")
+    return render(request, 'inspeakers/speakerprofile.html',context)
 
 def sign_up(request):
     registered = False
