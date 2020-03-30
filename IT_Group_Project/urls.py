@@ -26,6 +26,7 @@ urlpatterns = [
     path('', views.home, name='home'),
     path('inspeakers/', include('inspeakers.urls')),
     path('ratings/',include('star_ratings.urls', namespace='ratings')),
+    path('oauth/', include('social_django.urls', namespace='social')),
     path('accounts/', include('registration.backends.simple.urls')),  # Reference for user authentication
     url('', include('social_django.urls', namespace='social'))
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
