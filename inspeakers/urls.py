@@ -20,4 +20,5 @@ urlpatterns = [
     path('myaccount/', views.my_account, name='my_account'),
     path('myfavourite/', views.my_favourite, name='my_favourite'),
     path('myreviews/', views.my_reviews, name='my_reviews'),
+    path('home/speakerprofile/<slug:speaker_profile_slug>/comment_query', views.comment_query, name='comment_query'),
 ]
