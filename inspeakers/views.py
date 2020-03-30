@@ -213,7 +213,7 @@ def comment(request,speaker_profile_slug):
         user = UserProfile.objects.get(user=request.user)
         speaker = SpeakerProfile.objects.get(slug=speaker_profile_slug)
         Comment.objects.create(user=user, body=comment_text, date=time, speaker=speaker,created_on=created_on)
-    return speakerprofile(request,speaker_profile_slug)
+    return  redirect(reverse('inspeakers:speaker_profile',kwargs={'speaker_profile_slug':speaker_profile_slug}))
 
 def comment_query(request, speaker_profile_slug):
     m = 5

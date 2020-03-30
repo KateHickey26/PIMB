@@ -201,7 +201,7 @@
               <div class="star-ratings" data-max-rating="5" data-avg-rating="0.000"></div>
             <form id="add_comment" action="{%url 'inspeakers:comment' speaker.slug%}" method="post">
               {% csrf_token %}
-              <textarea class="form-control" name="comment"></textarea>
+              <textarea class="form-control" name="comment" required></textarea>
               <button class="btn btn-primary my-2"><span>Save Comment</span></button>
           </form>
           </div>
