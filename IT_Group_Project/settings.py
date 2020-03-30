@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'inspeakers',
     'star_ratings',
-    'registration',  # Add in the registration package
+    'registration',# Add in the registration package
+    'social_django'
 ]
 
 MIDDLEWARE = [
