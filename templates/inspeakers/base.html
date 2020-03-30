@@ -5,83 +5,84 @@
 <script type="text/javascript" src="//code.jquery.com/jquery-2.1.0.js"></script>
 <script async src="https://cse.google.com/cse.js?cx=002858639642519775440:wqougxmojpz"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 {% block link_block %}
 {% endblock %}
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
       integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 <head>
-      <meta charset="UTF-8"/>
-      <meta name="google-site-verification" content="9uk58ZbxJsMQOlKd_3NZ9nFYwDdCPecouzQyH9hsul4" />
+    <meta charset="UTF-8"/>
+    <meta name="google-site-verification" content="9uk58ZbxJsMQOlKd_3NZ9nFYwDdCPecouzQyH9hsul4"/>
     <title>
-         InSpeakers
+        InSpeakers
         {% block title_block %}
         {% endblock %}
     </title>
-          <base href="/inspeakers/">
-  </head>
-  <body>
-    <header style="background-color: #D0D0D0;">
-      <div class="container" name="header" >
-            <div class="row">
-                <div class="col-7 align-self-center">
-                    <h1 class="row mx-2 my-2 py-2" name="title"><font size="20">InSpeakers</font></h1>
-                    <h2 class="row mx-2 my-2 py-2" name="tagline1"><font size-"5">Find your inspiration</font></h1>
+    <base href="/inspeakers/">
+</head>
+<body>
+<header style="background-color: #D0D0D0;">
+    <div class="container" name="header">
+        <div class="row">
+            <div class="col-7 align-self-center">
+                <h1 class="row mx-2 my-2 py-2" name="title"><font size="20">InSpeakers</font></h1>
+                <h2 class="row mx-2 my-2 py-2" name="tagline1"><font size-"5">Find your inspiration</font></h1>
                     <div style="overflow: auto; width:100%;">
-                    <div class="row mx-2 my-2 py-2" name="tagline2" style="height:100%;">
-                      You can search by clicking a tag! <br/>
-                        {% block tags_block %}
-                            {% get_tags %}
-                        {% endblock %}
-                      </div>
+                        <div class="row mx-2 my-2 py-2" name="tagline2" style="height:100%;">
+                            You can search by clicking a tag! <br/>
+                            {% block tags_block %}
+                                {% get_tags %}
+                            {% endblock %}
+                        </div>
                     </div>
-                </div>
-                <div class="col-5 align-self-center">
-                    <div class="row mt-4 md-2 py-2 justify-content-end" name="login" >
-                        {% if user.is_authenticated %}
+            </div>
+            <div class="col-5 align-self-center">
+                <div class="row mt-4 md-2 py-2 justify-content-end" name="login">
+                    {% if user.is_authenticated %}
                         <div class="row justify-content-center">
-                            <div class="col-3 mx-1">Welcome {{user.username}} !</div>
+                            <div class="col-3 mx-1">Welcome {{ user.username }} !</div>
                             <div class="col-2 mx-1">
-                            <form method="get" action="{% url 'inspeakers:logout' %}">
-                                <button class="btn btn-outline-primary px-4">Logout</button>
-                            </form>
+                                <form method="get" action="{% url 'inspeakers:logout' %}">
+                                    <button class="btn btn-outline-primary px-4">Logout</button>
+                                </form>
                             </div>
                         </div>
-                        {% else %}
+                    {% else %}
                         <div class="col">
-                        <form method="get" action="{% url 'inspeakers:login' %}">
-                            <button class="btn btn-outline-primary px-4">Login</button>
-                        </form>
+                            <form method="get" action="{% url 'inspeakers:login' %}">
+                                <button class="btn btn-outline-primary px-4">Login</button>
+                            </form>
                         </div>
                         <div class="col">
-                        <form method="get" action="{% url 'inspeakers:sign_up' %}">
-                            <button class="btn btn-outline-primary px-4">Sign up</button>
-                        </form>
+                            <form method="get" action="{% url 'inspeakers:sign_up' %}">
+                                <button class="btn btn-outline-primary px-4">Sign up</button>
+                            </form>
                         </div>
-                        {% endif %}
+                    {% endif %}
+                </div>
+                <div class="row mx-2 my-2 py-2 justify-content-end" name="search">
+                    <div style="width:100%;">
+                        <div class="gcse-searchbox-only"></div>
                     </div>
-                    <div class="row mx-2 my-2 py-2 justify-content-end" name="search" >
-                        <div style="width:100%;">
-                            <div class="gcse-searchbox-only"></div>
-                       </div>
                 </div>
             </div>
         </div>
     </div>
-        <nav style="background-color: #F0F8FF; border-style: solid; border-width: 1px 0px 1px 0px; border-color: #F0FFFF;">
-            <div class="nav my-1 justify-content-center" >
-                <li class="nav-item">
-                <a class="nav-link" href="{% url 'inspeakers:about'%}">About Us</a>
-                </li>
-                <li class="nav-item">
-                <a class="nav-link" href="{% url 'inspeakers:home'%}">Home</a>
-                </li>
-                <li class="nav-item">
-                <a class="nav-link" href="{% url 'inspeakers:rate'%}">Top Rated Speakers</a>
-                </li>
-                <li class="nav-item">
+    <nav style="background-color: #F0F8FF; border-style: solid; border-width: 1px 0px 1px 0px; border-color: #F0FFFF;">
+        <div class="nav my-1 justify-content-center">
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'inspeakers:about' %}">About Us</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'inspeakers:home' %}">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'inspeakers:rate' %}">Top Rated Speakers</a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link" href="{% url 'inspeakers:fav' %}">Most Liked</a>
-                </li>
+            </li>
         </div>
     </nav>
 </header>
