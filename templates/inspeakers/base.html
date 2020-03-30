@@ -77,10 +77,10 @@
                 <a class="nav-link" href="{% url 'inspeakers:home'%}">Home</a>
                 </li>
                 <li class="nav-item">
-                <a class="nav-link" href="{% url 'inspeakers:rate'%}">Top Rated Speakers</a>
+                <a class="nav-link" href="{% url 'inspeakers:rate'%}">Top Rated</a>
                 </li>
                 <li class="nav-item">
-                <a class="nav-link" href="{% url 'inspeakers:fav' %}">Most Liked</a>
+                <a class="nav-link" href="{% url 'inspeakers:fav' %}">Most Favourited</a>
                 </li>
         </div>
     </nav>
@@ -113,13 +113,16 @@
             <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
                 <h6 class="text-uppercase font-weight-bold">Website Links</h6>
                 <p>
-                    <a class="light-grey-text" href="#!">Your Account</a>
+                    <a class="nav-link" href="{% url 'inspeakers:about'%}">About Us</a>
                 </p>
                 <p>
-                    <a class="light-grey-text" href="#!">Top Rated Speakers</a>
+                  <a class="nav-link" href="{% url 'inspeakers:home'%}">Home</a>
                 </p>
                 <p>
-                    <a class="light-grey-text" href="#!">Your Favourite Speakers</a>
+                    <a class="light-grey-text" href="#!">Top Rated</a>
+                </p>
+                <p>
+                  <a class="nav-link" href="{% url 'inspeakers:fav' %}">Most Favourited</a>
                 </p>
             </div>
             <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
