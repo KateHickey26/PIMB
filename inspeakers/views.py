@@ -7,12 +7,16 @@ from django.urls import reverse
 from inspeakers.models import *
 from datetime import datetime
 from inspeakers.forms import UserForm
+from star_ratings.models import *
 import copy
+from django.template.loader import render_to_string
+from django.template.loader import get_template
+import json
 
 
 # Create your views here.
 def home(request):
-    context_dict = get_speakers(request, 'name', None)
+    context_dict = get_speakers(request, None, None)
     context_dict['page']['url'] = 'home'
     context_dict['description'] = 'Homepage'
     return render(request, 'inspeakers/home.html', context_dict)
@@ -27,7 +31,7 @@ def rate(request):
     return render(request, 'inspeakers/home.html', context_dict)
 
 def tag(request, tag_name_slug):
-    context_dict = get_speakers(request, 'name', tag_name_slug)
+    context_dict = get_speakers(request, None, tag_name_slug)
     context_dict['page']['url'] = 'home/tag/'+tag_name_slug
     context_dict['description'] = 'Tag: ' + tag_name_slug
     return render(request, 'inspeakers/home.html', context_dict)
@@ -50,10 +54,19 @@ def get_speakers(request, order, tag, user = None):
         page = 1
     else:
         page = int(page)
-    if order is None:
-        order='name'
 
-    if user is not None:
+    speakers = []
+
+    if order == "-favcount":
+        speakers = SpeakerProfile.objects.order_by(order)
+    elif order == "-rate":
+        rates = Rating.objects.order_by("-average")
+        print(rates)
+        speakers = []
+        for r in rates:
+            speakers.append(r.content_object)
+
+    elif user is not None:
         try:
             speakers = []
             sp = Favourite.objects.filter(user=user)
@@ -61,16 +74,19 @@ def get_speakers(request, order, tag, user = None):
                 speakers.append(s.speakers)
         except:
             speakers = []
-    elif tag is None:
-        speakers = SpeakerProfile.objects.order_by(order)
-    else:
+    elif tag is not None:
         t = Tag.objects.get(slug=tag)
-        speakers = SpeakerProfile.objects.filter(tags=t).order_by(order)
-
+        speakers = SpeakerProfile.objects.filter(tags=t)
+    elif order is None:
+        speakers = SpeakerProfile.objects.all()
     try:
-        context_dict = {'speakers': speakers[(page-1)*max_result: (page)*max_result]}
+        if len(speakers) > (page)* max_result:
+            context_dict = {'speakers': speakers[(page-1)*max_result: (page)*max_result]}
+        else:
+            context_dict = {'speakers': speakers[(page - 1) * max_result:]}
     except:
         context_dict = {}
+
     if page <= 1:
         context_dict['page'] = {'previous':1}
     else:
@@ -105,7 +121,6 @@ def speakerprofile(request, speaker_profile_slug):
     s = SpeakerProfile.objects.get(slug=speaker_profile_slug)
     context_dict={}
     if user.is_authenticated :
-        profile = SpeakerProfile.objects.get(speaker=user)
         if fav == '0':
             Favourite.objects.filter(user=user).filter(speakers=s).delete()
         elif fav == '1':
@@ -120,6 +135,10 @@ def speakerprofile(request, speaker_profile_slug):
         print(s.favcount)
         s.save()
         if request.method == 'POST':
+            try:
+                profile = SpeakerProfile.objects.get(speaker=user)
+            except:
+                profile = None
             if 'profile_photo' in request.FILES:
                 profile.picture = request.FILES['profile_photo']
             profile.save()
@@ -166,6 +185,7 @@ def speakerprofileedit(request):
             if not t.speakerprofile_set.all().exists():
                 t.delete()
         profile.save()
+        return speakerprofile(request,profile.slug)
     else:
         try:
             profile = SpeakerProfile.objects.get(speaker=request.user)
@@ -189,11 +209,31 @@ def comment(request,speaker_profile_slug):
     # Comment posted
     if request.method == 'POST':
         comment_text = request.POST.get('comment')
-        time = str(datetime.now())[0:10]
+        created_on = datetime.now()
+        time = str(created_on)[0:10]
         user = UserProfile.objects.get(user=request.user)
         speaker = SpeakerProfile.objects.get(slug=speaker_profile_slug)
-        Comment.objects.create(user=user, body=comment_text, date=time, speaker=speaker)
-    return render(request, 'inspeakers/speakerprofile.html',context)
+        Comment.objects.create(user=user, body=comment_text, date=time, speaker=speaker,created_on=created_on)
+    return speakerprofile(request,speaker_profile_slug)
+
+def comment_query(request, speaker_profile_slug):
+    m = 5
+    page = request.GET.get('page')
+    to = request.GET.get('to')
+    page = int(page)-1 + int(to)
+    speaker = SpeakerProfile.objects.get(slug=speaker_profile_slug)
+    comments = Comment.objects.filter(speaker=speaker).order_by('-created_on')
+    if page < 0:
+        page = 0
+    if page*m+m > len(comments):
+        page = int(len(comments)/m)
+        c = comments[page * m:]
+    else:
+        c = comments[page * m:page * m + m]
+    template = get_template('inspeakers/review.html')
+    html = template.render({'comments': c})
+    result = {'status': 1, 'msg': '', 'html': html, 'page':page+1}
+    return HttpResponse(json.dumps(result),content_type='application/json')
 
 def sign_up(request):
     registered = False
@@ -208,8 +248,7 @@ def sign_up(request):
                 profile.profile_image = request.FILES['picture']
             profile.save()
             registered = True
-        else:
-            print(user_form.errors)
+            return redirect("/inspeakers/login/")
     else:
         user_form = UserForm()
     return render(request,'inspeakers/signup.html')
