@@ -7,8 +7,10 @@ from django.contrib.auth.models import User
 
 def populate():
     User.objects.all().delete()
-    tags = [{'name':'A'},{'name':'B'},{'name':'C'},{'name':'D'}]
-    speakers = [{'name':'Adam','desc': 'No desc now','rate': 0, 'Tags':['A','C']},{'name':'Ben','desc': 'No desc now','rate': 3,'Tags':['','C']},{'name':'Chris','desc': 'No desc now','rate': 1, 'Tags':['A','B','C']},{'name':'Donald','desc': 'No desc now','rate': 4,'Tags':['D']}]
+    tags = [{'name':'Corporate Events'},{'name':'Wellness Retreats'},{'name':'C'},{'name':'Job Fairs'},{'name':'Hotel Conference Room Fillers'},{'name':'Lonely Hearts Conventions'}]
+    speakers = [{'name':'Adam Scott','desc': 'Are you looking for someone to bring some flair to your next corporate event? Look no further!','rate': 3, 'Tags':['Corporate Events']},{'name':'Ben Halpert','desc': 'I specialise in convincing unemployed people to stop looking for a job, and start giving me money (taken bi-monthly) to help them acheive their dreams!!','rate': 4,'Tags':['','Job Fairs']},
+    {'name':'Emma-Jane Andrews','desc': 'One day I dreamt about all the people in the world who have been unlucky in love. I realised that there are millions of lonely people in the world who have never found that special someone. Then an apiphany hit me: I could charge all those people to learn how to be ready to accept love in to their hearts, which could equate to millions of dollars in ticket sales! Its simple dollars and cents!'
+    ,'rate': 5, 'Tags':['Wellness Retreats','Hotel Conference Room Fillers','Lonely Hearts Conventions']},{'name':'Donald Sax','desc': 'Self Care is very important to me. This is why my life goals is to charge other a fair, nominal fee for a weekend retreat where you can learn to meditate, to channel good vibes, and to sit cross-legged on the ground.','rate': 1,'Tags':['Wellness Retreats']}]
     for s in speakers:
         add_speakers(s['name'], s['desc'],s['Tags'],s['rate'])
 
