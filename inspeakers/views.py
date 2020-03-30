@@ -296,7 +296,7 @@ def user_login(request):
 @login_required
 def my_account(request):
     user = request.user
-    profile = UserProfile.objects.get(user=user)
+    profile = UserProfile.objects.get_or_create(user=user)
 
     # if post, change data
     if request.method == 'POST':
