@@ -1,4 +1,6 @@
-from django.urls import path
+
+from django.conf.urls import url
+from django.urls import path, include
 from inspeakers import views
 
 app_name = 'inspeakers'
@@ -12,6 +14,7 @@ urlpatterns = [
     path('home/fav/', views.mfav, name='fav'),
     path('login/', views.user_login, name='login'),
     path('logout/', views.user_logout, name='logout'),
+    url(r'^oauth/', include('social_django.urls', namespace='social')),
     path('home/speakerprofile/<slug:speaker_profile_slug>', views.speakerprofile, name='speaker_profile'),
     path('home/speakerprofile/<slug:speaker_profile_slug>/comment', views.comment, name='comment'),
     path('home/speakerprofile', views.speakerprofileedit, name='speaker_profile_edit'),
@@ -21,4 +24,5 @@ urlpatterns = [
     path('myfavourite/', views.my_favourite, name='my_favourite'),
     path('myreviews/', views.my_reviews, name='my_reviews'),
     path('home/speakerprofile/<slug:speaker_profile_slug>/comment_query', views.comment_query, name='comment_query'),
+
 ]

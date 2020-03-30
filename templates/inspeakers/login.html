@@ -1,14 +1,50 @@
-{% extends 'inspeakers/base.html' %}
-<!-- we could also add {% load staticfiles %} here
-    to have the graphics needed for the page -->
+<html><head></head><body>{% extends 'inspeakers/base.html' %}
+{% load static %}
 
 {% block title_block %}
 Speaker profile
 {% endblock %}
+
+<script>
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId      : 670666930358436,
+      cookie     : true,
+      xfbml      : true,
+      version    : 'v5.6.2 ',
+    });
+
+    FB.AppEvents.logPageView();
+
+  };
+
+  (function(d, s, id){
+     var js, fjs = d.getElementsByTagName(s)[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement(s); js.id = id;
+     js.src = "https://connect.facebook.net/en_US/sdk.js";
+     fjs.parentNode.insertBefore(js, fjs);
+   }(document, 'script', 'facebook-jssdk'));
+</script>
+
 {% block body_block %}
+
 <div>
+        <div class="row">
+        <div class="col-md-8 mx-auto social-container my-2 order-md-1">
+            <button class="btn btn-danger  mb-2">
+                <a href="#">Login with Instagram</a>
+            </button>
+            <button class="btn btn-primary mb-2">
+                <a href="{% url 'social:begin' 'facebook' %}">Login with Facebook
+                </a>
+            </button>
+            <button class="btn btn-info mb-2">
+                <a href="{% url 'social:begin' 'linkedin-oauth2' %}">Login with LinkedIn</a>
+            </button>
+        </div>
     <div class="container">
-        <form id="login_form" method="post" action="{% url 'inspeakers:login' %}">
+            <form id="login_form" method="post" action="{% url 'inspeakers:login' %}">
             {% csrf_token %}
             <label for="uname"><b>Username</b></label>
             <input type="text" placeholder="Enter Username" id="uname" name="uname" required><br/>
@@ -18,6 +54,7 @@ Speaker profile
         </form>
     </div>
 </div>
-
+</div>
 {% endblock %}
 
+</body></html>

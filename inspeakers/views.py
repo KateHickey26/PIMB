@@ -13,6 +13,7 @@ from django.template.loader import render_to_string
 from django.template.loader import get_template
 import json
 
+
 # Create your views here.
 def home(request):
     context_dict = get_speakers(request, None, None)
