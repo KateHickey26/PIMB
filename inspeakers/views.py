@@ -9,6 +9,9 @@ from datetime import datetime
 from inspeakers.forms import UserForm
 from star_ratings.models import *
 import copy
+from django.template.loader import render_to_string
+from django.template.loader import get_template
+import json
 
 # Create your views here.
 def home(request):
@@ -181,6 +184,7 @@ def speakerprofileedit(request):
             if not t.speakerprofile_set.all().exists():
                 t.delete()
         profile.save()
+        return speakerprofile(request,profile.slug)
     else:
         try:
             profile = SpeakerProfile.objects.get(speaker=request.user)
@@ -204,11 +208,31 @@ def comment(request,speaker_profile_slug):
     # Comment posted
     if request.method == 'POST':
         comment_text = request.POST.get('comment')
-        time = str(datetime.now())[0:10]
+        created_on = datetime.now()
+        time = str(created_on)[0:10]
         user = UserProfile.objects.get(user=request.user)
         speaker = SpeakerProfile.objects.get(slug=speaker_profile_slug)
-        Comment.objects.create(user=user, body=comment_text, date=time, speaker=speaker)
-    return render(request, 'inspeakers/speakerprofile.html',context)
+        Comment.objects.create(user=user, body=comment_text, date=time, speaker=speaker,created_on=created_on)
+    return speakerprofile(request,speaker_profile_slug)
+
+def comment_query(request, speaker_profile_slug):
+    m = 5
+    page = request.GET.get('page')
+    to = request.GET.get('to')
+    page = int(page)-1 + int(to)
+    speaker = SpeakerProfile.objects.get(slug=speaker_profile_slug)
+    comments = Comment.objects.filter(speaker=speaker).order_by('-created_on')
+    if page < 0:
+        page = 0
+    if page*m+m > len(comments):
+        page = int(len(comments)/m)
+        c = comments[page * m:]
+    else:
+        c = comments[page * m:page * m + m]
+    template = get_template('inspeakers/review.html')
+    html = template.render({'comments': c})
+    result = {'status': 1, 'msg': '', 'html': html, 'page':page+1}
+    return HttpResponse(json.dumps(result),content_type='application/json')
 
 def sign_up(request):
     registered = False
@@ -223,8 +247,7 @@ def sign_up(request):
                 profile.profile_image = request.FILES['picture']
             profile.save()
             registered = True
-        else:
-            print(user_form.errors)
+            return redirect("/inspeakers/login/")
     else:
         user_form = UserForm()
     return render(request,'inspeakers/signup.html')
