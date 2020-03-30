@@ -6,8 +6,7 @@ from inspeakers.models import *
 from django.contrib.auth.models import User
 
 def populate():
-    User.objects.all().delete()
-    tags = [{'name':'Corporate Events'},{'name':'Wellness Retreats'},{'name':'C'},{'name':'Job Fairs'},{'name':'Hotel Conference Room Fillers'},{'name':'Lonely Hearts Conventions'}]
+    tags = [{'name':'Corporate Events'},{'name':'Wellness Retreats'},{'name':'Job Fairs'},{'name':'Hotel Conference Room Fillers'},{'name':'Lonely Hearts Conventions'}]
     speakers = [{'name':'Adam Scott','desc': 'Are you looking for someone to bring some flair to your next corporate event? Look no further!','rate': 3, 'Tags':['Corporate Events'], 'email':'lucy@munroesmotivators.com','phone':'0563 456 66','company':'Munroes Motivators','hourlyrate':'£500','twitter':'https://twitter.com/home'},
     {'name':'Ben Halpert','desc': 'I specialise in convincing unemployed people to stop looking for a job, and start giving me money (taken bi-monthly) to help them acheive their dreams!!','rate': 4,'Tags':['','Job Fairs'], 'email':'hnelson@nelsontalent.com','phone':'0173 466 56','company':'Nelson Talent','hourlyrate':'£250','twitter':'https://twitter.com/home'},
     {'name':'Emma-Jane Andrews','desc': 'One day I dreamt about all the people in the world who have been unlucky in love. I realised that there are millions of lonely people in the world who have never found that special someone. Then an apiphany hit me: I could charge all those people to learn how to be ready to accept love in to their hearts, which could equate to millions of dollars in ticket sales! Its simple dollars and cents!'

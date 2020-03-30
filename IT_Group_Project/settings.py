@@ -43,9 +43,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'inspeakers',
+    'social_django',
     'star_ratings',
-    'registration',# Add in the registration package
-    'social_django'
+    'registration',  # Add in the registration package
 ]
 
 MIDDLEWARE = [
@@ -73,10 +73,17 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'django.template.context_processors.media',
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
             ],
         },
     },
 ]
+
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.facebook.FacebookOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+)
 
 WSGI_APPLICATION = 'IT_Group_Project.wsgi.application'
 
@@ -149,7 +156,11 @@ REGISTRATION_OPEN = True
 # If True, the user will be automatically logged in after registering.
 REGISTRATION_AUTO_LOGIN = True
 # The URL that Django redirects users to after logging in.
-LOGIN_REDIRECT_URL = 'rango:index'
+LOGIN_REDIRECT_URL = 'inspeakers:home'
 # The page users are directed to if they are not logged in.
 # This was set in a previous chapter. The registration package uses this, too.
 LOGIN_URL = 'auth_login'
+SOCIAL_AUTH_URL_NAMESPACE = 'social'
+SOCIAL_AUTH_FACEBOOK_KEY = '670666930358436'
+SOCIAL_AUTH_FACEBOOK_SECRET = '45d297f53e5f9de2cae5d52ff848d4d7'
+

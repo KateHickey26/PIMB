@@ -15,34 +15,40 @@ import json
 
 
 # Create your views here.
+
+#home page
 def home(request):
     context_dict = get_speakers(request, None, None)
     context_dict['page']['url'] = 'home'
     context_dict['description'] = 'Homepage'
     return render(request, 'inspeakers/home.html', context_dict)
 
+#about page
 def about(request):
     return render(request, 'inspeakers/about.html')
 
+#top rated page
 def rate(request):
     context_dict = get_speakers(request, '-rate', None)
     context_dict['page']['url'] = 'home/rate'
     context_dict['description'] = 'Top Rated'
     return render(request, 'inspeakers/home.html', context_dict)
 
+#tag page
 def tag(request, tag_name_slug):
     context_dict = get_speakers(request, None, tag_name_slug)
     context_dict['page']['url'] = 'home/tag/'+tag_name_slug
     context_dict['description'] = 'Tag: ' + tag_name_slug
     return render(request, 'inspeakers/home.html', context_dict)
 
+#most favourited page
 def mfav(request):
     context_dict = get_speakers(request, '-favcount', None)
     context_dict['page']['url'] = 'home/fav'
     context_dict['description'] = 'Most Liked'
     return render(request, 'inspeakers/home.html', context_dict)
 
-
+#method for all home page view
 def get_speakers(request, order, tag, user = None):
     page = request.GET.get('page')
     max_result = request.GET.get('max_result')
@@ -57,6 +63,7 @@ def get_speakers(request, order, tag, user = None):
 
     speakers = []
 
+    #get data
     if order == "-favcount":
         speakers = SpeakerProfile.objects.order_by(order)
     elif order == "-rate":
@@ -65,7 +72,6 @@ def get_speakers(request, order, tag, user = None):
         speakers = []
         for r in rates:
             speakers.append(r.content_object)
-
     elif user is not None:
         try:
             speakers = []
@@ -79,6 +85,8 @@ def get_speakers(request, order, tag, user = None):
         speakers = SpeakerProfile.objects.filter(tags=t)
     elif order is None:
         speakers = SpeakerProfile.objects.all()
+
+    #set pages
     try:
         if len(speakers) > (page)* max_result:
             context_dict = {'speakers': speakers[(page-1)*max_result: (page)*max_result]}
@@ -87,6 +95,7 @@ def get_speakers(request, order, tag, user = None):
     except:
         context_dict = {}
 
+    #set page number
     if page <= 1:
         context_dict['page'] = {'previous':1}
     else:
@@ -120,13 +129,17 @@ def speakerprofile(request, speaker_profile_slug):
     user = request.user
     s = SpeakerProfile.objects.get(slug=speaker_profile_slug)
     context_dict={}
+
+    #for user
     if user.is_authenticated :
+        #fav button clicked
         if fav == '0':
             Favourite.objects.filter(user=user).filter(speakers=s).delete()
         elif fav == '1':
             f = Favourite.objects.get_or_create(user=user,speakers=s)[0]
             f.save()
 
+        #hide fav button or unfav button
         if Favourite.objects.filter(user=user).filter(speakers=s).exists():
             context_dict['fav'] = True
         else:
@@ -134,6 +147,8 @@ def speakerprofile(request, speaker_profile_slug):
         s.favcount = Favourite.objects.filter(speakers=s).count()
         print(s.favcount)
         s.save()
+
+        #for upload images
         if request.method == 'POST':
             try:
                 profile = SpeakerProfile.objects.get(speaker=user)
@@ -150,6 +165,7 @@ def speakerprofile(request, speaker_profile_slug):
 
 @login_required
 def speakerprofileedit(request):
+    #if post, fill data
     if request.method == 'POST':
         name = request.POST.get('name')
         description = request.POST.get('about')
@@ -175,7 +191,9 @@ def speakerprofileedit(request):
         profile.twitter = twitter
         profile.ins = ins
         profile.website = website
+        #read tags
         tags = tags.split(';')
+        #old tag will be cleared if no one is using it
         old = copy.copy(profile.tags.all())
         profile.tags.clear()
         for t in tags:
@@ -191,6 +209,8 @@ def speakerprofileedit(request):
             profile = SpeakerProfile.objects.get(speaker=request.user)
         except:
             profile = None
+
+    # if not post, fill the text box with exist data
     context={}
     context['speaker'] = profile
     sl = []
@@ -217,6 +237,8 @@ def comment(request,speaker_profile_slug):
     return  redirect(reverse('inspeakers:speaker_profile',kwargs={'speaker_profile_slug':speaker_profile_slug}))
 
 def comment_query(request, speaker_profile_slug):
+    #comment query for page view in speaker profile
+    #JQuery ajax request only
     m = 5
     page = request.GET.get('page')
     to = request.GET.get('to')
@@ -275,6 +297,8 @@ def user_login(request):
 def my_account(request):
     user = request.user
     profile = UserProfile.objects.get(user=user)
+
+    # if post, change data
     if request.method == 'POST':
         newname = request.POST.get('username')
         newpsw = request.POST.get('password')
@@ -287,6 +311,8 @@ def my_account(request):
             profile.profile_image = request.FILES['profile_photo']
         user.save()
         profile.save()
+
+    #return page
     context_dict={}
     if profile.profile_image is not None:
         context_dict['picture'] = profile.profile_image
@@ -305,6 +331,8 @@ def my_account(request):
 # at the moment, review is part of the speaker profile page
 # we can't control "login required" with this method
 # possibly open a new page to add a review?
+
+#user favourite page
 @login_required
 def my_favourite(request):
     context_dict = get_speakers(request,None,None,request.user)
@@ -312,6 +340,7 @@ def my_favourite(request):
     context_dict['description'] = 'My favourite'
     return render(request, 'inspeakers/home.html', context_dict)
 
+#user's comments pages
 @login_required
 def my_reviews(request):
     return render(request,'inspeakers/myreviews.html')
