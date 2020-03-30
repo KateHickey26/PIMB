@@ -248,7 +248,7 @@ def sign_up(request):
                 profile.profile_image = request.FILES['picture']
             profile.save()
             registered = True
-            # return redirect(reverse('inspeakers:home'))
+            # return redirect(reverse('inspeakers:login'))
             return redirect("/inspeakers/login/")
     else:
         user_form = UserForm()
