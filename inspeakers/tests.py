@@ -1,8 +1,12 @@
 from django.test import TestCase, Client, override_settings
-from django.urls import reverse
 from django.contrib import auth
+import os
+os.environ.setdefault('DJANGO_SETTINGS_MODULE','IT_Group_Project.settings')
+import django
+django.setup()
+from inspeakers.models import *
 from django.contrib.auth.models import User
-from inspeakers.models import UserProfile
+from populate import *
 
 # All tests created below
 
@@ -77,3 +81,10 @@ class InspeakersTest(TestCase):
         newUser = auth.get_user(self.client)
         self.assertFalse(newUser.is_authenticated(), "Signup test user successfully logged out")
 
+    # SPEAKER PROFILE TESTS ###################################################
+    # Testing populating a speaker profile
+
+    def test_speaker_profile_populate(self):
+        self.client.add_speakers("testperson1", "This is just a test spokesperson", "testing", "testperson1@test.com", "020202020", "Test Company", "500","twitter")
+        response = self.client.get("/")
+        self.assertContains(response, "spokesperson", msg_prefix="Speaker profile description successfully contains test word")
