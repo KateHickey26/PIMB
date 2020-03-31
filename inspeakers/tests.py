@@ -82,9 +82,11 @@ class InspeakersTest(TestCase):
         self.assertFalse(newUser.is_authenticated(), "Signup test user successfully logged out")
 
     # SPEAKER PROFILE TESTS ###################################################
-    # Testing populating a speaker profile
+    # Testing populating of a speaker profile and home page
 
     def test_speaker_profile_populate(self):
         self.client.add_speakers("testperson1", "This is just a test spokesperson", "testing", "testperson1@test.com", "020202020", "Test Company", "500","twitter")
-        response = self.client.get("/")
+        response = self.client.get(reverse('inspeakers:speakerprofile'))
         self.assertContains(response, "spokesperson", msg_prefix="Speaker profile description successfully contains test word")
+        response = self.client.get(reverse('inspeakers:home'))
+        self.assertContains(response, "spokesperson", msg_prefix="Home page description successfully contains test word")
