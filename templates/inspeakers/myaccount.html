@@ -1,4 +1,4 @@
-{% extends 'inspeakers/base.html' %}
+{% extends 'inspeakers/base.html' %} <!--extends base -->
 {% load staticfiles %}
 
 {% block title_block %}
@@ -10,10 +10,10 @@ My Account
         <div class="col-5 my-auto">
             <h1><span class="label label-default">My Account</span></h1>
             <img src="{{ MEDIA_URL }}{{picture}}"
-                 class="img-fluid img-thumbnail" alt="My Profile Picture"/>
+                 class="img-fluid img-thumbnail" alt="My Profile Picture"/> <!--loads profile picture for user account -->
         </div>
         <div class="col-3 my-auto">
-            <div class="form-group">
+            <div class="form-group"> <!--Below is form for creating a user -->
                 <form action="{% url 'inspeakers:my_account' %}" method="post" enctype="multipart/form-data">
                     {% csrf_token %}
                     <input id="imageUpload" type="file" name="profile_photo" placeholder="Photo" capture>
@@ -30,7 +30,7 @@ My Account
             </div>
         </div>
     </div>
-    <div>
+    <div>  <!--for navigating to other useful parts of the site -->
         <a href="{% url 'inspeakers:my_favourite'%}"><button class="btn btn-primary my-2 px-2"> My Favourites</button></a>
         <a href="{% url 'inspeakers:my_reviews'%}"><button class="btn btn-primary my-2 px-2"> My Reviews</button></a>
         {% if created %}

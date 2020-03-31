@@ -160,6 +160,8 @@ LOGIN_REDIRECT_URL = 'inspeakers:home'
 # The page users are directed to if they are not logged in.
 # This was set in a previous chapter. The registration package uses this, too.
 LOGIN_URL = 'auth_login'
+
+#namespace for social authentication and below the FB app key and secret
 SOCIAL_AUTH_URL_NAMESPACE = 'social'
 SOCIAL_AUTH_FACEBOOK_KEY = '670666930358436'
 SOCIAL_AUTH_FACEBOOK_SECRET = '45d297f53e5f9de2cae5d52ff848d4d7'
