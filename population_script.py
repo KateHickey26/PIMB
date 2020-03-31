@@ -15,8 +15,6 @@ def populate():
     for s in speakers:
         add_speakers(s['name'], s['desc'],s['Tags'],s['email'],s['phone'],s['company'],s['hourlyrate'],s['twitter'])
 
-    for t in tags:
-        add_tag(t['name'])
 
 def add_tag(name, popularity=0):
     t = Tag.objects.get_or_create(name = name)[0]
