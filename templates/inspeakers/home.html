@@ -10,6 +10,7 @@ Homepage
             <div class="col-9">
                 <h1>Welcome to {{description}}!</h1>
                 <ul>Find your next motivational speaker.</ul>
+<!--                list of speakers-->
                 <div name="list">
                     {% if speakers %}
                         {% for s in speakers %}
@@ -46,6 +47,8 @@ Homepage
                     </div>
                 </div>
             </div>
+
+<!--            sidebar-->
             <div class="col-3">
                 {% if user.is_authenticated %}
                 <div class="card my-4 text-right">
