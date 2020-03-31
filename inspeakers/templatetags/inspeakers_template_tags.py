@@ -3,6 +3,7 @@ from inspeakers.models import *
 
 register = template.Library()
 
+#template tags for tagline
 @register.inclusion_tag('inspeakers/tags.html')
 def get_tags(speaker=None):
     if speaker is not None:
@@ -11,12 +12,14 @@ def get_tags(speaker=None):
         tags = Tag.objects.order_by('popularity')
     return {'tags': tags}
 
+#template tags for profile comments
 @register.inclusion_tag('inspeakers/review.html')
 def get_reviews(speaker=None):
     if speaker is not None:
-        comments = Comment.objects.filter(speaker=speaker)
+        comments = Comment.objects.filter(speaker=speaker).order_by('-created_on')[0:5]
     return {'comments': comments}
 
+#template tags for user's comments
 @register.inclusion_tag('inspeakers/review.html')
 def my_reviews(user=None):
     if user is not None:

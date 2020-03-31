@@ -2,18 +2,23 @@
 {% load staticfiles %}
 {% load inspeakers_template_tags %}
 <html lang="en">
+<script type="text/javascript" src="//code.jquery.com/jquery-2.1.0.js"></script>
 <script async src="https://cse.google.com/cse.js?cx=002858639642519775440:wqougxmojpz"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-  <head>
-    <meta charset="UTF-8"/>
+{% block link_block %}
+{% endblock %}
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+<head>
+      <meta charset="UTF-8"/>
       <meta name="google-site-verification" content="9uk58ZbxJsMQOlKd_3NZ9nFYwDdCPecouzQyH9hsul4" />
     <title>
-        InSpeakers
-    {% block title_block %}
-    {% endblock %}
+         InSpeakers
+        {% block title_block %}
+        {% endblock %}
     </title>
-      <base href="/inspeakers/">
+          <base href="/inspeakers/">
   </head>
   <body>
     <header style="background-color: #D0D0D0;">
@@ -28,7 +33,7 @@
                         {% block tags_block %}
                             {% get_tags %}
                         {% endblock %}
-                    </div>
+                      </div>
                     </div>
                 </div>
                 <div class="col-5 align-self-center">
@@ -58,11 +63,11 @@
                     <div class="row mx-2 my-2 py-2 justify-content-end" name="search" >
                         <div style="width:100%;">
                             <div class="gcse-searchbox-only"></div>
-                        </div>
-                    </div>
+                       </div>
                 </div>
             </div>
         </div>
+    </div>
         <nav style="background-color: #F0F8FF; border-style: solid; border-width: 1px 0px 1px 0px; border-color: #F0FFFF;">
             <div class="nav my-1 justify-content-center" >
                 <li class="nav-item">
@@ -72,21 +77,67 @@
                 <a class="nav-link" href="{% url 'inspeakers:home'%}">Home</a>
                 </li>
                 <li class="nav-item">
-                <a class="nav-link" href="{% url 'inspeakers:rate'%}">Top Rated Speaker</a>
+                <a class="nav-link" href="{% url 'inspeakers:rate'%}">Top Rated</a>
                 </li>
                 <li class="nav-item">
-                <a class="nav-link" href="{% url 'inspeakers:fav' %}">Most Liked</a>
+                <a class="nav-link" href="{% url 'inspeakers:fav' %}">Most Favourited</a>
                 </li>
+        </div>
+    </nav>
+</header>
+<div>
+    {% block body_block %}
+    {% endblock %}
+</div>
+<div>
+    {% block sidebar_block %}
+    {% endblock %}
+</div>
+    <!--Below is a footer that contains a short blurb about the company, some useful links to other parts of the website,
+     and contact details where users can reach us. Helps keep the website neat. -->
+<footer class="page-footer font-small blue-grey lighten-5">
+    <div style="background-color: #5bc0de;">
+        <div class="container">
+            <div class="row py-4 d-flex align-items-center">
+                <div class="col-md-6 col-lg-5 text-center text-md-left mb-4 mb-md-0">
+                    <h6 class="mb-0">A Forty-Five Minute Talk Could Change Your Life!</h6>
+                </div>
             </div>
-        </nav>
-    </header>
-    <div>
-      {% block body_block %}
-      {% endblock %}
+        </div>
     </div>
-    <div>
-      {% block sidebar_block %}
-      {% endblock %}
+    <div class="container text-center text-md-left mt-5">
+        <div class="row mt-3 dark-grey-text">
+            <div class="col-md-3 col-lg-4 col-xl-3 mb-4">
+                <h6 class="text-uppercase font-weight-bold">Company Blurb</h6>
+                <p class="text-justify"> Become a part of the <i>InSpeakers</i> community so that you can connect
+                    with world class winners who will change your life.</p>
+            </div>
+            <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4 text-justify text-lg-center">
+                <h6 class="text-uppercase font-weight-bold">Website Links</h6>
+                <p>
+                    <a class="nav-link" href="{% url 'inspeakers:about'%}">About Us</a>
+                </p>
+                <p>
+                  <a class="nav-link" href="{% url 'inspeakers:home'%}">Home</a>
+                </p>
+                <p>
+                    <a class="light-grey-text" href="{% url 'inspeakers:rate' %}">Top Rated</a>
+                </p>
+                <p>
+                  <a class="nav-link" href="{% url 'inspeakers:fav' %}">Most Favourited</a>
+                </p>
+            </div>
+            <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
+                <h6 class="text-uppercase font-weight-bold">Contact</h6>
+                <p>Glasgow, UK</p>
+                <p>Inspeakers@glasgow.ac.uk</p>
+                <p> 0141 123 456</p>
+            </div>
+        </div>
     </div>
-  </body>
+    <div class="footer-copyright text-center text-black-50 py-3">
+        <a class="dark-grey-text" > InSpeakers.com</a>
+    </div>
+</footer>
+</body>
 </html>
