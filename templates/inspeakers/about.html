@@ -16,7 +16,7 @@
             </p>
             <p>We put the satisfaction of our customers at the forefront of everything we do. So you can feel confident that
               from when you first land on our home page to the conclusion of your event, we will be ensuring you spend every penny
-              of that previously well invested money on the most intricantly planned and exhaustively billed 3 hours of you and your employees lives.<br/>
+              of that previously well invested money on the most intricantly planned and exhaustively billed 45 minutes of you and your employees lives.<br/>
             </p>
             <p>
               Whether you're planning a corporate event, a wellness weekend, or just need some change in your life after that nasty divorce, we have the speaker for you!<br/>
@@ -31,16 +31,22 @@
         </div>
 
         <div class="col-3">
-                <div class="card my-4 text-right">
-                    <div class="card-body">
-                        <div class="row my-2 justify-content-center">
-                            <button class="btn btn-primary my-2 px-2">My Account</button>
-                        </div>
-                        <div class="row my-2 justify-content-center">
-                            <button class="btn btn-primary my-2 px-2">My Favourites</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+              {% if user.is_authenticated %}
+              <div class="card my-4 text-right">
+                  <div class="card-body">
+                      <div class="row my-2 justify-content-center">
+                          <form action="myaccount/" method="get">
+                              <button class="btn btn-primary my-2 px-2" type="submit">My Account</button>
+                          </form>
+                      </div>
+                      <div class="row my-2 justify-content-center">
+                          <form action="myfavourite/" method="get">
+                              <button class="btn btn-primary my-2 px-2">My Favourites</button>
+                          </form>
+                      </div>
+                  </div>
+              </div>
+            {% endif %}
+      </div>
     </div>
 {% endblock %}

@@ -14,7 +14,7 @@ def get_tags(speaker=None):
 @register.inclusion_tag('inspeakers/review.html')
 def get_reviews(speaker=None):
     if speaker is not None:
-        comments = Comment.objects.filter(speaker=speaker)
+        comments = Comment.objects.filter(speaker=speaker).order_by('-created_on')[0:5]
     return {'comments': comments}
 
 @register.inclusion_tag('inspeakers/review.html')

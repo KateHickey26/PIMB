@@ -16,7 +16,7 @@ My Account
             <div class="form-group">
                 <form action="{% url 'inspeakers:my_account' %}" method="post" enctype="multipart/form-data">
                     {% csrf_token %}
-                    <input id="imageUpload" type="file" name="profile_photo" placeholder="Photo" required="" capture>
+                    <input id="imageUpload" type="file" name="profile_photo" placeholder="Photo" capture>
                     <label for="exampleInputEmail1">Username</label>
                     <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="username"
                            placeholder="{{user.username}}">

@@ -1,4 +1,4 @@
-{% extends 'inspeakers/base.html' %}
+ {% extends 'inspeakers/base.html' %}
 {% load staticfiles %}
 {% load ratings %}
 {% load inspeakers_template_tags %}
@@ -6,17 +6,18 @@
   Speaker profile
 {% endblock %}
 {% block body_block %}
-<script type="text/javascript" src="//code.jquery.com/jquery-2.1.0.js"></script>
+{% block link_block %}
 <script type="text/javascript" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+<script type="text/javascript" src="/static/js/comment_query.js"></script>
 <link rel="stylesheet" href="{% static 'star-ratings/css/star-ratings.css' %}">
 <script type="text/javascript" src="{% static 'star-ratings/js/dist/star-ratings.min.js' %}"></script>
-
+{% endblock %}
 <div class="container">
   <div class="row my-3">
 
       <div class="col-md-3">
-          <div class="profile-img" style="overflow: hidden; position: relative; width: 300px; height:300">
-          <img src="{{ MEDIA_URL }}{{speaker.picture}}" alt="Speaker profile picture" />
+          <div class="profile-img" style="overflow: hidden; position: relative; height: 400px;">
+          <img src="{{ MEDIA_URL }}{{speaker.picture}}" alt="Speaker profile picture" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);"/>
           <!--  <img src="https://www.aboutmanchester.co.uk/wp-content/uploads/2018/05/speaker.jpg"
         alt="speaker image" height="400" width="250"/> -->
           </div>
@@ -127,15 +128,30 @@
     </div>
   </div>
 
-
     <div class="row">
-      <div class="col-md-8">
+      <div class="col-md-6">
         <div class="profile-work">
           <strong><p>Check Me Out</p></strong>
+            {% if speaker.youtube %}
           <a href="{{speaker.youtube}}">Youtube</a><br/>
+            {%else%}
+            <div>No Youtube link</div>
+            {%endif%}
+            {% if speaker.twitter %}
           <a href="{{speaker.twitter}}">@Twitter</a><br/>
+            {%else%}
+            <div>No Twitter link</div>
+            {%endif%}
+            {% if speaker.ins %}
           <a href="{{speaker.ins}}">@Instagram</a><br/>
+            {%else%}
+            <div>No Instagram link</div>
+            {%endif%}
+            {% if speaker.website %}
           <a href="{{speaker.website}}">Website</a><br/>
+            {%else%}
+            <div>No website link</div>
+            {%endif%}
           <strong><p>My Tags</p></strong>
           {% get_tags speaker %}
         </div>
@@ -162,19 +178,21 @@
       </div>
     </div>
 </div>
+    </div>
 
-
-<div class='comments' id='comments'>
   <div class="row justify-content-center">
-    <div class="col-md-8 card mb-4  mt-3 ">
+    <div class="col-md-9 card mb-4  mt-3 ">
         <h2>Comments</h2>
 
       <div class='previous_comments'>
         <!-- comments -->
       <h3> Previous Reviews </h3>
-        <ul>
+        <ul id="comments">
           {% get_reviews speaker %}
         </ul>
+          <div id="page" value="1"  action="{% url 'inspeakers:comment_query' speaker.slug %}"></div>
+               <button id="previous" name="page" type="button">Previous</button>
+              <button id="next" name="page" type="button" >Next</button>
       </div>
 
       <h2> Leave a Comment </h2>
@@ -183,7 +201,7 @@
               <div class="star-ratings" data-max-rating="5" data-avg-rating="0.000"></div>
             <form id="add_comment" action="{%url 'inspeakers:comment' speaker.slug%}" method="post">
               {% csrf_token %}
-              <textarea class="form-control" name="comment"></textarea>
+              <textarea class="form-control" name="comment" required></textarea>
               <button class="btn btn-primary my-2"><span>Save Comment</span></button>
           </form>
           </div>
@@ -193,5 +211,5 @@
     </div>
   </div>
 </div>
-
+  </div>
 {% endblock %}

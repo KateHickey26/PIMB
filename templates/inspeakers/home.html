@@ -1,5 +1,5 @@
 {% extends 'inspeakers/base.html' %}
-{% load staticfiles %}
+{% load static %}
 
 {% block title_block %}
 Homepage
@@ -19,7 +19,7 @@ Homepage
                                             <img src="{{ MEDIA_URL }}{{s.picture}}" class="card-img" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
                                     </div>
                                     <div class="col-md-7"style="height: 200px;">
-                                        <div class="card-body">
+                                        <div class="card-body" style="height:200px; overflow:auto">
                                         <h5 class="card-title">{{s.name}}</h5>
                                         <p class="card-text">{{s.description}}</p>
                                         <a href="{% url 'inspeakers:speaker_profile' s.slug %}" class="card-link">Link</a>
