@@ -13,6 +13,8 @@
           </h1>
         </div>
      <div class="row mx-5 justify-content-center">
+
+    <!-- form beginning -->
      <form action="{% url 'inspeakers:speaker_profile_edit' %}", method="post">
          {% csrf_token %}
          <div class="input-group flex-nowrap my-2">

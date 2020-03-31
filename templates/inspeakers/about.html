@@ -8,6 +8,7 @@
 <div>
     <h1 class = 'title'> About </h1>
 
+    <!-- main body -->
     <div class="container" name="main body" >
     <div class="row my-3">
         <div class="col-9">
@@ -30,6 +31,7 @@
             </p>
         </div>
 
+        <!-- RHS buttons, only visible if user is logged in -->
         <div class="col-3">
               {% if user.is_authenticated %}
               <div class="card my-4 text-right">
